@@ -12,7 +12,7 @@
 
 ## 实践任务
 
-在 `src/merchant_agent/tools/python_runner.py` 中新增：
+在 `src/merchant_agent/tools/python_sandbox/python_runner.py` 中新增：
 
 ```python
 def remove_container(container_id: str) -> None:

@@ -12,7 +12,7 @@ Docker 官方说明 `docker create` 会把新容器 ID 写到标准输出。[Doc
 
 ## 实践任务
 
-在 `src/merchant_agent/tools/python_runner.py` 新增：
+在 `src/merchant_agent/tools/python_sandbox/python_runner.py` 新增：
 
 ```python
 def parse_container_id(stdout: str) -> str:

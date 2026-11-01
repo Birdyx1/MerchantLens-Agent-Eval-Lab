@@ -14,7 +14,7 @@ Agent 传入的 Python 代码可能报错、无限运行或访问外部资源。
 
 ## 实践任务
 
-创建 `src/merchant_agent/tools/python_request.py`，实现：
+创建 `src/merchant_agent/tools/python_sandbox/python_request.py`，实现：
 
 ```python
 def validate_python_request(code: str, timeout_seconds: int) -> None:

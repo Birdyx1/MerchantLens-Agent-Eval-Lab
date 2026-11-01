@@ -57,7 +57,7 @@ import sqlite3
 import tempfile
 from pathlib import Path
 
-from merchant_agent.tools.init_orders_db import create_orders_db
+from merchant_agent.tools.sql.init_orders_db import create_orders_db
 from merchant_agent.tracing.reader import read_spans
 from merchant_agent.tracing.validator import validate_trace
 from merchant_agent.tracing.writer import append_span
@@ -106,7 +106,10 @@ Trace 检查结果: []
 │   └── traces/                    # 模拟 Trace 与运行清单
 ├── schemas/span.schema.json       # 单条 Span 结构约束
 ├── src/merchant_agent/
-│   ├── tools/init_orders_db.py    # 模拟数据初始化
+│   ├── tools/
+│   │   ├── python_sandbox/        # Python 容器执行与恢复
+│   │   ├── sql/                   # SQLite 数据初始化与查询
+│   │   └── search/                # 搜索结果、接口与模拟服务
 │   └── tracing/                   # 读写与基础跨记录校验
 ├── pyproject.toml
 └── uv.lock
@@ -116,7 +119,7 @@ Trace 检查结果: []
 
 - 当前数据初始化程序面向单进程练习。导入失败可能遗留数据库文件，并发创建的原子保护尚未实现。
 - 父子引用、重试语义、证据核验和工具快照回放尚未完整实现；JSONL 读取不等于完整回放。
-- 下一步是实现并验证 SQL 只读查询，随后接入 Python 执行、网页检索、MCP 与 LangGraph。
+- SQL 只读查询与 Python 容器执行已有基础实现；网页检索、MCP 与 LangGraph 仍在逐步建设。
 - 阶段 5 计划产出首版小规模评测报告；后续再完善裁判校准、分层评测、安全门禁与数据飞轮。
 
 完整课时和验收记录见[总计划](docs/plan.md)。

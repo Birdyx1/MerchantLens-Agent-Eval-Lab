@@ -4,7 +4,7 @@ import tempfile
 import unittest
 from unittest.mock import Mock, patch
 
-from merchant_agent.tools import python_runner as runner
+from merchant_agent.tools.python_sandbox import python_runner as runner
 
 
 class RunnerTests(unittest.TestCase):

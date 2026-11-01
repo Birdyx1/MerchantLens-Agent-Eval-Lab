@@ -14,7 +14,7 @@
 
 ## 实践任务
 
-在 `src/merchant_agent/tools/python_command.py` 新增：
+在 `src/merchant_agent/tools/python_sandbox/python_command.py` 新增：
 
 ```python
 def build_docker_create_args(code: str, timeout_seconds: int) -> list[str]:

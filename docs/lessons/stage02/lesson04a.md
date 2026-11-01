@@ -1,6 +1,6 @@
 # 2.4a 搜索结果数据结构
 
-状态：进行中，等待学员提交。
+状态：已通过。
 
 [2.4 总览](lesson04.md) · [阶段文档](README.md) · [总计划](../../plan.md)
 
@@ -14,7 +14,7 @@ Agent 需要记录证据来源，评测时才能检查答案是否有依据。[W
 
 ## 实践任务
 
-新建 `src/merchant_agent/tools/search_result.py`，用标准库 `dataclasses.dataclass` 定义 `SearchResult`，所有字段均为必填字符串：
+新建 `src/merchant_agent/tools/search/search_result.py`，用标准库 `dataclasses.dataclass` 定义 `SearchResult`，所有字段均为必填字符串：
 
 | 字段 | 含义 |
 |---|---|
@@ -42,3 +42,4 @@ Agent 需要记录证据来源，评测时才能检查答案是否有依据。[W
 
 - 2026-11-01：开课，等待学员提交。
 - 2026-11-01：2.3 验收后重新开始本课，等待学员提交。
+- 2026-11-01：学员完成 `SearchResult`；五个必填字段、类型注解、属性读取、字典与 JSON 序列化及缺参报错均通过验证。使用模拟数据，未访问网络。

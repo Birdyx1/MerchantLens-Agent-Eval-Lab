@@ -14,7 +14,7 @@ Python 的 `subprocess.run` 可以接收参数列表并等待进程完成。这�
 
 ## 实践任务
 
-创建 `src/merchant_agent/tools/python_runner.py`，实现：
+创建 `src/merchant_agent/tools/python_sandbox/python_runner.py`，实现：
 
 ```python
 def inspect_python_image() -> str:

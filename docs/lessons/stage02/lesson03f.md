@@ -14,7 +14,7 @@ Python 程序可能输出很多内容，Trace 和 Agent 上下文不能无限增
 
 ## 实践任务
 
-创建 `src/merchant_agent/tools/output_limit.py`，实现：
+创建 `src/merchant_agent/tools/python_sandbox/output_limit.py`，实现：
 
 ```python
 def limit_output(text: str, max_bytes: int) -> tuple[str, bool]:

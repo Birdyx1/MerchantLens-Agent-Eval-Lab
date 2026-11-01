@@ -14,7 +14,7 @@
 
 ## 实践任务
 
-创建 `src/merchant_agent/tools/sql_query.py`，实现：
+创建 `src/merchant_agent/tools/sql/sql_query.py`，实现：
 
 ```python
 def get_store_net(db_path: str, store_id: str) -> int | None:

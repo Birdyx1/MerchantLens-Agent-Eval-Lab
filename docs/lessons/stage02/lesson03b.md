@@ -14,7 +14,7 @@
 
 ## 实践任务
 
-创建 `src/merchant_agent/tools/python_command.py`，实现：
+创建 `src/merchant_agent/tools/python_sandbox/python_command.py`，实现：
 
 ```python
 def build_docker_args(code: str, timeout_seconds: int) -> list[str]:
@@ -54,7 +54,7 @@ def build_docker_args(code: str, timeout_seconds: int) -> list[str]:
 
 - 2026-11-01：已开课，等待学员提交；Docker 守护进程在当前工具环境不可访问，本课无需实际运行。
 - 首次评审：参数内容与顺序、含引号换行的代码及无效输入检查均通过；没有启动 Docker。
-- 第 1 行使用 `from src.merchant_agent...`，在仓库根目录可能因工作目录恰好在搜索路径中而通过；从仓库外只将 `src` 加入 PYTHONPATH 时实际触发 ModuleNotFoundError。需改为 `from merchant_agent.tools.python_request import validate_python_request` 后复测。
+- 第 1 行使用 `from src.merchant_agent...`，在仓库根目录可能因工作目录恰好在搜索路径中而通过；从仓库外只将 `src` 加入 PYTHONPATH 时实际触发 ModuleNotFoundError。需改为 `from merchant_agent.tools.python_sandbox.python_request import validate_python_request` 后复测。
 - 未代改学员文件，等待修订。隔离和超时尚未实际验证。
 - 2026-11-01：学员反馈更改导入后找不到模块；检查发现 IDE 的 src 尚未设置为源码根目录。教师应请求修正导入并配置本地 IDE；从仓库外设置 PYTHONPATH 后验证导入、参数和无效输入通过。IDE 界面是否刷新未验证。
 - 课时通过；未运行 Docker，实际隔离、超时及清理仍待 2.3h 验证。

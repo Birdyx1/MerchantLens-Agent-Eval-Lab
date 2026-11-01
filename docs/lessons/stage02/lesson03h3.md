@@ -14,7 +14,7 @@
 
 ## 实践任务
 
-在 `src/merchant_agent/tools/python_runner.py` 新增：
+在 `src/merchant_agent/tools/python_sandbox/python_runner.py` 新增：
 
 ```python
 def generate_container_name() -> str:

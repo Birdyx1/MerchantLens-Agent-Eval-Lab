@@ -14,7 +14,7 @@ SQLite 将数据保存在本地数据库文件中，无需单独启动数据库�
 
 ## 实践任务
 
-创建 `src/merchant_agent/tools/init_orders_db.py`，自行实现：
+创建 `src/merchant_agent/tools/sql/init_orders_db.py`，自行实现：
 
 ```python
 def create_orders_db(csv_path: str, db_path: str) -> None:

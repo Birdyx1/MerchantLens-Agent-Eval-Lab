@@ -14,7 +14,7 @@
 
 ## 实践任务
 
-创建 `src/merchant_agent/tools/python_result.py`，使用 Python 标准库的 `dataclasses.dataclass` 定义 `PythonRunResult`：
+创建 `src/merchant_agent/tools/python_sandbox/python_result.py`，使用 Python 标准库的 `dataclasses.dataclass` 定义 `PythonRunResult`：
 
 | 字段 | 类型 | 含义 |
 |---|---|---|
