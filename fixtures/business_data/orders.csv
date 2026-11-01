@@ -1,0 +1,4 @@
+order_id,store_id,paid_fen,refunded_fen
+O001,A,10000,2000
+O002,A,5000,1000
+O003,B,8000,0

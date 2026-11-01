@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "trace_id": {
+      "$ref": "#/$defs/traceId",
+      "description": "The trace ID of the span"
+    },
+    "span_id": {
+      "$ref": "#/$defs/spanId",
+      "description": "The span ID of the span"
+    },
+    "parent_span_id": {
+      "anyOf": [
+        { "$ref": "#/$defs/spanId" },
+        { "type": "null" }
+      ],
+      "description": "The parent span ID of the span"
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the span"
+    },
+    "start_time": {
+      "type": "string",
+      "description": "The start time of the span"
+    },
+    "end_time": {
+      "type": "string",
+      "description": "The end time of the span"
+    },
+    "attributes": {
+      "type": "object",
+      "description": "The attributes of the span"
+    }
+  },
+  "required": [
+    "trace_id",
+    "span_id",
+    "parent_span_id",
+    "name",
+    "start_time",
+    "end_time",
+    "attributes"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "traceId": {
+      "type": "string",
+      "minLength": 32,
+      "maxLength": 32,
+      "pattern": "^[0-9a-f]+$",
+      "not": { "const": "00000000000000000000000000000000" }
+    },
+    "spanId": {
+      "type": "string",
+      "minLength": 16,
+      "maxLength": 16,
+      "pattern": "^[0-9a-f]+$",
+      "not": { "const": "0000000000000000" }
+    }
+  }
+}

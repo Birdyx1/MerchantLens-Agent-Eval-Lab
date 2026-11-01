@@ -1,0 +1,19 @@
+{
+    "trace_id": "a1b2c3d4e5f678901234567890abcdef",
+    "simulated": true,
+    "model": {
+      "name": "mock-model",
+      "version": "mock-v1"
+    },
+    "harness": {
+      "name": "mock-harness",
+      "version": "mock-v1"
+    },
+    "tools": [
+      {
+        "name": "sql.query",
+        "version": "mock-v1"
+      }
+    ],
+    "data_snapshot": "mock-basic-v1"
+}

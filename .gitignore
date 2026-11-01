@@ -1,0 +1,22 @@
+# Python and local environments
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Editor and local tooling
+.DS_Store
+.idea/
+.vscode/
+.playwright-mcp/
+
+# Local secrets and generated run artifacts
+.env
+.env.*
+!.env.example
+runs/
+*.db
+*.sqlite
+*.sqlite3
