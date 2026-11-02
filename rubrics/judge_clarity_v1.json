@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "rubric_id": "judge_clarity_v1",
+  "criterion": "answer_clarity",
+  "question": "最终回答是否明确说明查询对象、净收入金额与单位，且没有互相矛盾的金额表述？",
+  "scores": {
+    "0": "没有可理解的结论，或出现互相矛盾的金额",
+    "1": "有结论但对象、金额或单位表达不够明确",
+    "2": "明确说明查询对象、净收入金额和单位，表述无矛盾"
+  },
+  "missing_answer": 0
+}
