@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Merchant Agent Rubric v1",
+  "type": "object",
+  "required": ["schema_version", "rubric_id", "task_type", "criteria"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "rubric_id": {"type": "string", "pattern": "^[a-z][a-z0-9_-]{2,63}$"},
+    "task_type": {"const": "store_net"},
+    "criteria": {
+      "type": "array", "minItems": 3, "maxItems": 3,
+      "items": {
+        "type": "object",
+        "required": ["id", "dimension", "question", "evaluator", "check_key", "evidence_sources", "missing_evidence", "severity", "pass_example", "fail_example"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {"type": "string", "pattern": "^[a-z][a-z0-9_-]{2,63}$"},
+          "dimension": {"enum": ["result", "trajectory"]},
+          "question": {"type": "string", "minLength": 10},
+          "evaluator": {"const": "code"},
+          "check_key": {"enum": ["answer_amount_equals_oracle", "required_tool_call", "answer_matches_tool_result"]},
+          "evidence_sources": {
+            "type": "array", "minItems": 1, "uniqueItems": true,
+            "items": {"enum": ["trial.final_answer", "trial.trace.tool.get_store_net", "task.oracle"]}
+          },
+          "missing_evidence": {"const": "fail"},
+          "severity": {"const": "blocking"},
+          "pass_example": {"type": "string", "minLength": 1},
+          "fail_example": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  }
+}

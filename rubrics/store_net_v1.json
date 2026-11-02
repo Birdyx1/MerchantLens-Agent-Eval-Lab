@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "rubric_id": "store_net_v1",
+  "task_type": "store_net",
+  "criteria": [
+    {
+      "id": "amount_correct",
+      "dimension": "result",
+      "question": "最终回答中的门店净收入金额（单位分）是否等于 Task Oracle 的预期金额？",
+      "evaluator": "code",
+      "check_key": "answer_amount_equals_oracle",
+      "evidence_sources": ["trial.final_answer", "task.oracle"],
+      "missing_evidence": "fail",
+      "severity": "blocking",
+      "pass_example": "Oracle 为 12000 分，回答明确写出 12000 分。",
+      "fail_example": "Oracle 为 12000 分，回答写出 11000 分、没有金额，或同时给出多个未区分的金额。"
+    },
+    {
+      "id": "correct_sql_call",
+      "dimension": "trajectory",
+      "question": "Trace 中是否有一次成功的 get_store_net 调用，且 store_id 与 Task Oracle 一致？",
+      "evaluator": "code",
+      "check_key": "required_tool_call",
+      "evidence_sources": ["trial.trace.tool.get_store_net", "task.oracle"],
+      "missing_evidence": "fail",
+      "severity": "blocking",
+      "pass_example": "Oracle 要求门店 A，Trace 中 get_store_net(store_id=A) 成功。",
+      "fail_example": "只回答 12000 分而没有 SQL Span，或查询了门店 B。"
+    },
+    {
+      "id": "answer_grounded",
+      "dimension": "trajectory",
+      "question": "最终回答的净收入金额是否与本次成功 SQL 工具 Span 的返回金额一致？",
+      "evaluator": "code",
+      "check_key": "answer_matches_tool_result",
+      "evidence_sources": ["trial.final_answer", "trial.trace.tool.get_store_net"],
+      "missing_evidence": "fail",
+      "severity": "blocking",
+      "pass_example": "SQL 返回 12000 分，最终回答也明确写出 12000 分。",
+      "fail_example": "SQL 返回 12000 分，最终回答却写出 15000 分。"
+    }
+  ]
+}

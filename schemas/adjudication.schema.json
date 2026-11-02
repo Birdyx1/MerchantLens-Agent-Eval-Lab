@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Merchant Agent Task Adjudication v1",
+  "type": "object",
+  "required": ["schema_version", "task_id", "task_sha256", "fixture_sha256", "reviewer_ids", "source_annotation_sha256", "resolution", "adjudicator_id", "final_judgment", "rationale", "decided_at"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "task_id": {"type": "string", "pattern": "^[a-z][a-z0-9_-]{2,63}$"},
+    "task_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "fixture_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "reviewer_ids": {
+      "type": "array", "minItems": 2, "maxItems": 2, "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[a-z][a-z0-9_-]{2,63}$"}
+    },
+    "source_annotation_sha256": {
+      "type": "object", "minProperties": 2, "maxProperties": 2,
+      "propertyNames": {"pattern": "^[a-z][a-z0-9_-]{2,63}$"},
+      "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+    },
+    "resolution": {"enum": ["consensus", "adjudicated"]},
+    "adjudicator_id": {"type": ["string", "null"]},
+    "final_judgment": {
+      "type": "object", "required": ["solvable", "expected_amount_fen", "store_id"],
+      "additionalProperties": false,
+      "properties": {
+        "solvable": {"type": "boolean"},
+        "expected_amount_fen": {"type": ["integer", "null"], "minimum": 0},
+        "store_id": {"type": ["string", "null"], "minLength": 1}
+      },
+      "allOf": [{
+        "if": {"properties": {"solvable": {"const": true}}},
+        "then": {"properties": {"expected_amount_fen": {"type": "integer"}, "store_id": {"type": "string", "minLength": 1}}},
+        "else": {"properties": {"expected_amount_fen": {"type": "null"}, "store_id": {"type": "null"}}}
+      }]
+    },
+    "rationale": {"type": "string", "minLength": 1},
+    "decided_at": {"type": "string", "format": "date-time"}
+  }
+}

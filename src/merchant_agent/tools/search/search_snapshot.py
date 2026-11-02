@@ -1,9 +1,15 @@
 from dataclasses import asdict
+from typing import TypedDict
 
 from merchant_agent.tools.search.search_result import SearchResult
 
 
-def make_search_snapshot(query: str, results: list[SearchResult]) -> dict:
+class SearchSnapshot(TypedDict):
+    query: str
+    results: list[dict[str, str]]
+
+
+def make_search_snapshot(query: str, results: list[SearchResult]) -> SearchSnapshot:
     """
     生成一次检索的证据快照，记录 Agent 当时收到的搜索结果。
 
