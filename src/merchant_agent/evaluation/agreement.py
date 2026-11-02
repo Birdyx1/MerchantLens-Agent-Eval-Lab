@@ -13,6 +13,7 @@ from collections.abc import Mapping
 from jsonschema import Draft202012Validator, FormatChecker
 
 from merchant_agent.evaluation.task import load_eval_task, task_content_sha256
+from merchant_agent.evaluation.reference import store_net_from_fixture
 
 
 FIELDS = ("solvable", "expected_amount_fen", "store_id")
@@ -50,7 +51,7 @@ class AgreementReport:
 
     task_count: int
     exact_match_rate: float
-    field_match_rates: Mapping[str, float]
+    field_match_rates: Mapping[str, float | None]
     solvable_kappa: float | None
 
 
@@ -94,10 +95,16 @@ def summarize_agreement(pairs: list[PairComparison]) -> AgreementReport:
     if not pairs or len({pair.task_id for pair in pairs}) != len(pairs):
         raise ValueError("一致性报告需要非空、Task ID 不重复的配对")
     count = len(pairs)
-    field_rates = {
-        field: sum(getattr(pair.left, field) == getattr(pair.right, field)
-                   for pair in pairs) / count for field in FIELDS
+    field_rates: dict[str, float | None] = {
+        "solvable": sum(pair.left.solvable == pair.right.solvable for pair in pairs) / count,
     }
+    comparable = [pair for pair in pairs if pair.left.solvable and pair.right.solvable]
+    for field in ("expected_amount_fen", "store_id"):
+        field_rates[field] = (
+            sum(getattr(pair.left, field) == getattr(pair.right, field)
+                for pair in comparable) / len(comparable)
+            if comparable else None
+        )
     kappa = None
     if count >= 2 and len({pair.reviewer_ids for pair in pairs}) == 1:
         observed = field_rates["solvable"]
@@ -243,4 +250,6 @@ def validate_resolution_for_task(
     if (not final.solvable or final.expected_amount_fen != task.expected_amount_fen
             or final.store_id != task.required_tool_arguments["store_id"]):
         raise ValueError("仲裁真值与 Task Oracle 不一致；应修订并重新标注 Task")
+    if store_net_from_fixture(task.fixture_path, final.store_id) != final.expected_amount_fen:
+        raise ValueError("仲裁真值与冻结业务数据的参考解不一致")
     return record

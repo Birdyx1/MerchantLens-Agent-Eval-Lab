@@ -7,7 +7,7 @@ import uuid
 from enum import StrEnum
 from pathlib import Path
 
-from merchant_agent.evaluation.task import EvalTask, load_eval_task
+from merchant_agent.evaluation.task import EvalTask, load_eval_task, task_exposure_sha256
 from merchant_agent.evaluation.rubric import load_task_rubric
 from merchant_agent.evaluation.agreement import validate_resolution_for_task
 
@@ -61,6 +61,13 @@ class EvalSetStore:
                     validate_resolution_for_task(staging, project_root=self.project_root)
                 if any(self.task_path(item, task.task_id).exists() for item in EvalCollection):
                     raise FileExistsError("Task ID 已存在于评测集合中")
+                if (self.project_root / "holdout" / "tasks" / f"{task.task_id}.json").exists():
+                    raise FileExistsError("Task ID 已存在于 Holdout")
+                exposure = task_exposure_sha256(staging)
+                existing = list(self.base_dir.glob("*/tasks/*.json"))
+                existing.extend((self.project_root / "holdout" / "tasks").glob("*.json"))
+                if any(task_exposure_sha256(path) == exposure for path in existing):
+                    raise ValueError("题面已存在于其他评测集合或 Holdout")
                 target = self.task_path(collection, task.task_id)
                 # 硬链接只在内容完整后发布；目标已存在时不会覆盖。
                 os.link(staging, target)

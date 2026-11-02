@@ -70,3 +70,17 @@ def task_content_sha256(path: Path) -> str:
     data.pop("oracle", None)
     canonical = json.dumps(data, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+
+def task_exposure_sha256(path: Path) -> str:
+    """识别跨集合复用的同一题面；忽略 Task ID、来源、Oracle 和流程状态。"""
+    data = json.loads(path.read_text(encoding="utf-8"))
+    exposure = {
+        "task_type": data["task_type"],
+        "rubric_id": data["rubric_id"],
+        "rubric_sha256": data["rubric_sha256"],
+        "input": data["input"],
+        "environment": data["environment"],
+    }
+    canonical = json.dumps(exposure, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()

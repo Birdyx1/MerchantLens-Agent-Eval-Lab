@@ -18,6 +18,7 @@ __pycache__/
 !.env.example
 runs/
 eval_sets/.registry.lock
+holdout/
 *.db
 *.sqlite
 *.sqlite3

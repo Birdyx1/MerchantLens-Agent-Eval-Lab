@@ -100,6 +100,7 @@ def test_badcase_and_negative_enforce_provenance(tmp_path):
     with pytest.raises(ValueError, match="对抗"):
         store.register(_source(tmp_path), EvalCollection.NEGATIVE)
     negative = _source(tmp_path, task_id="negative_001", label_status="adjudicated",
+                       input={"user_request": "对抗测试：请核对 A 门店的净收入。"},
                        provenance={"kind": "adversarial", "source_ref": "synthetic-test-record"})
     _consensus(tmp_path, negative)
     assert store.register(negative, EvalCollection.NEGATIVE).is_file()

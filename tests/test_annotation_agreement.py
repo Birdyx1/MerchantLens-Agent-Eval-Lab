@@ -9,10 +9,18 @@ from merchant_agent.evaluation.agreement import (
 )
 from merchant_agent.evaluation.annotation import submit_task_annotation
 from merchant_agent.evaluation.task import task_content_sha256
+from merchant_agent.evaluation.reference import store_net_from_fixture
 
 
 ROOT = Path(__file__).resolve().parents[1]
 EXAMPLE = ROOT / "fixtures/eval_task_examples/store_net_a.json"
+
+
+def test_reference_calculation_uses_frozen_business_rows():
+    fixture = ROOT / "fixtures/business_data/orders.csv"
+    assert store_net_from_fixture(fixture, "A") == 12000
+    assert store_net_from_fixture(fixture, "B") == 8000
+    assert store_net_from_fixture(fixture, "missing") is None
 
 
 def _project(tmp_path):
@@ -101,7 +109,8 @@ def test_wrong_consensus_cannot_promote_existing_oracle(tmp_path):
     data = json.loads(task.read_text(encoding="utf-8"))
     data["oracle"]["expected_amount_fen"] = 11000
     task.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
-    assert validate_resolution_for_task(task, project_root=tmp_path)["final_judgment"]["expected_amount_fen"] == 11000
+    with pytest.raises(ValueError, match="参考解不一致"):
+        validate_resolution_for_task(task, project_root=tmp_path)
 
 
 def test_binary_kappa_requires_multiple_comparable_tasks():
@@ -114,3 +123,14 @@ def test_binary_kappa_requires_multiple_comparable_tasks():
     report = summarize_agreement(pairs)
     assert report.exact_match_rate == 1
     assert report.solvable_kappa == 1
+    assert report.field_match_rates["expected_amount_fen"] == 1
+
+
+def test_amount_agreement_is_not_applicable_for_unsolvable_pairs():
+    pair = PairComparison(
+        "task_001", "a" * 64, "b" * 64, ("reviewer_a", "reviewer_b"),
+        Judgment(False, None, None), Judgment(False, None, None), (),
+    )
+    report = summarize_agreement([pair])
+    assert report.field_match_rates["solvable"] == 1
+    assert report.field_match_rates["expected_amount_fen"] is None
