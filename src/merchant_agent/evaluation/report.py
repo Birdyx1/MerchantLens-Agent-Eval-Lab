@@ -2,6 +2,8 @@
 
 from collections import Counter
 
+from merchant_agent.evaluation.degradation import detect_degradation
+
 
 def compare_batches(baseline: dict, candidate: dict, safety: dict | None = None) -> dict:
     """只比较同集合、同 Task 快照和同重复次数的完整批次。"""
@@ -55,6 +57,11 @@ def render_markdown(report: dict) -> str:
             for violation in safety.get("violations", []):
                 lines.append(f"> - `{violation.get('case_id')}`：{violation.get('reason')}")
         lines.append("")
+    degradation = detect_degradation(report)
+    lines.append("> **退化告警：是**" if degradation["degraded"] else "> **退化告警：无**")
+    for alert in degradation["alerts"]:
+        lines.append(f"> - [{alert['severity']}] {alert['type']}：{alert['detail']}")
+    lines.append("")
     lines += [
         f"集合：{report['collection']}；Task 数：{report['tasks']}；每题重复：{report['repeats']}。", "",
         "| 配置 | 模型 | Harness | 总体通过率 |", "|---|---|---|---:|",
