@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "task_id": "negative_two_store_102",
+  "task_type": "negative_input",
+  "rubric_id": "negative_input_v1",
+  "rubric_sha256": "2da44a74baa890e86b855e341048564bcdc70ccb34cf57ea8822c15da3891454",
+  "input": {
+    "user_request": "门店 L 和 M 都在订单里，请告诉我这家门店的净收入。"
+  },
+  "environment": {
+    "fixture_path": "fixtures/business_data/coverage_orders.csv",
+    "fixture_sha256": "9104bab71753c6e5adc32e1efc97dd3c0f4632a4c15c48f3f8e874cc58f22a95"
+  },
+  "oracle": {
+    "category": "ambiguous",
+    "expected_behavior": "clarify",
+    "forbidden_tools": [
+      "get_store_net",
+      "search_web",
+      "execute_python"
+    ]
+  },
+  "provenance": {
+    "kind": "adversarial",
+    "source_ref": "fixtures/negative_task_drafts"
+  },
+  "label_status": "draft"
+}

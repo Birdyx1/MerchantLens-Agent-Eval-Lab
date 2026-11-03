@@ -1,0 +1,10 @@
+{
+  "version": "1.0",
+  "provenance": "人工构造的虚构准入探针，不属于正式评测集合",
+  "cases": [
+    {"id": "store_a", "input": "查询虚构门店 A 的净收入，单位为分。", "expected_tool": "get_store_net", "expected_arguments": {"store_id": "A"}},
+    {"id": "store_b", "input": "查询虚构门店 B 的净收入，单位为分。", "expected_tool": "get_store_net", "expected_arguments": {"store_id": "B"}},
+    {"id": "web", "input": "检索短语 Agent evaluation，返回 3 条结果，查询词保持原样。", "expected_tool": "search_web", "expected_arguments": {"query": "Agent evaluation", "limit": 3}},
+    {"id": "python", "input": "用 Python 执行 print(6*7)，超时设为 2 秒。", "expected_tool": "execute_python", "expected_arguments": {"code": "print(6*7)", "timeout_seconds": 2}}
+  ]
+}

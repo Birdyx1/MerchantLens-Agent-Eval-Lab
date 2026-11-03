@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "fixture_id": "judge_clarity_challenges_v1",
+  "provenance": "人工构造的虚构门店回答；不属于 Golden、Regression、Badcase 或 Holdout",
+  "cases": [
+    {"case_id": "no_conclusion", "answer": "查询已完成，请查看结果。", "designed_score": 0, "design_reason": "没有可理解的净收入结论"},
+    {"case_id": "contradictory_amounts", "answer": "门店 A 的净收入为 12000 分；最终净收入为 13000 分。", "designed_score": 0, "design_reason": "同一对象出现互相矛盾的净收入金额"},
+    {"case_id": "missing_unit", "answer": "门店 A 的净收入是 12000。", "designed_score": 1, "design_reason": "有对象和金额，但没有金额单位"},
+    {"case_id": "missing_store", "answer": "净收入为 12000 分。", "designed_score": 1, "design_reason": "有金额和单位，但未说明查询对象"},
+    {"case_id": "clear_fen", "answer": "门店 A 的净收入为 12000 分。", "designed_score": 2, "design_reason": "对象、金额和单位齐全"},
+    {"case_id": "clear_conversion", "answer": "门店 A 的净收入为 12000 分，即 120.00 元。", "designed_score": 2, "design_reason": "对象、金额、单位齐全且换算一致"}
+  ]
+}

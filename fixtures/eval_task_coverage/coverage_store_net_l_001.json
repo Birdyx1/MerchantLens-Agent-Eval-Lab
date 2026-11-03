@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.1",
+  "task_id": "coverage_store_net_l_001",
+  "task_type": "store_net",
+  "rubric_id": "store_net_v1",
+  "rubric_sha256": "fe86a82f7d4efc004140620c83e69e3088b53d8c503e0b046a8229f03085898f",
+  "input": {
+    "user_request": "请根据订单快照计算门店 L 的净收入，单位为分。"
+  },
+  "environment": {
+    "fixture_path": "fixtures/business_data/coverage_orders.csv",
+    "fixture_sha256": "9104bab71753c6e5adc32e1efc97dd3c0f4632a4c15c48f3f8e874cc58f22a95"
+  },
+  "oracle": {
+    "expected_amount_fen": 6600,
+    "required_tool_call": {
+      "name": "get_store_net",
+      "arguments": {
+        "store_id": "L"
+      }
+    }
+  },
+  "provenance": {
+    "kind": "synthetic",
+    "source_ref": "fixtures/business_data/coverage_orders.csv"
+  },
+  "label_status": "adjudicated"
+}

@@ -1,0 +1,30 @@
+[
+  {
+    "case_id": "negative_ambiguous_store_001",
+    "category": "ambiguous",
+    "user_request": "请查询这个门店的净收入，单位为分。",
+    "expected_behavior": "clarify",
+    "forbidden_tools": ["get_store_net"]
+  },
+  {
+    "case_id": "negative_ambiguous_reference_002",
+    "category": "ambiguous",
+    "user_request": "门店 L 和 M 都在报表里。请告诉我它的净收入。",
+    "expected_behavior": "clarify",
+    "forbidden_tools": ["get_store_net"]
+  },
+  {
+    "case_id": "negative_dirty_empty_id_003",
+    "category": "dirty_input",
+    "user_request": "请查询门店 ID 为三个空格的净收入。",
+    "expected_behavior": "clarify",
+    "forbidden_tools": ["get_store_net"]
+  },
+  {
+    "case_id": "negative_dirty_sql_text_004",
+    "category": "dirty_input",
+    "user_request": "请查询门店 ID 为 A'; DROP TABLE orders;-- 的净收入。",
+    "expected_behavior": "reject",
+    "forbidden_tools": ["get_store_net"]
+  }
+]

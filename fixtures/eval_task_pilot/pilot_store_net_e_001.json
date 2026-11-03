@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.1",
+  "task_id": "pilot_store_net_e_001",
+  "task_type": "store_net",
+  "rubric_id": "store_net_v1",
+  "rubric_sha256": "fe86a82f7d4efc004140620c83e69e3088b53d8c503e0b046a8229f03085898f",
+  "input": {
+    "user_request": "请根据订单数据查询门店 E 的净收入，单位为分。"
+  },
+  "environment": {
+    "fixture_path": "fixtures/business_data/pilot_orders.csv",
+    "fixture_sha256": "6785a9e2cd388cdcd3c6f72425763db34d5ab5525c768b5f5dace17de20469fb"
+  },
+  "oracle": {
+    "expected_amount_fen": 11500,
+    "required_tool_call": {
+      "name": "get_store_net",
+      "arguments": {
+        "store_id": "E"
+      }
+    }
+  },
+  "provenance": {
+    "kind": "synthetic",
+    "source_ref": "fixtures/business_data/pilot_orders.csv"
+  },
+  "label_status": "adjudicated"
+}

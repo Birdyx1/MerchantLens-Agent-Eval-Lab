@@ -1,0 +1,79 @@
+{
+  "version": "1.0",
+  "fixture_id": "multi_tool_selection_v1",
+  "provenance": "人工构造的多工具选择合成题，供组件级评测使用；不属于 Golden/Regression 正式集合",
+  "cases": [
+    {
+      "id": "store_direct",
+      "scenario": "baseline",
+      "input": "查询虚构门店 A 的净收入，单位为分。",
+      "expected": {
+        "name": "get_store_net",
+        "arguments": {"store_id": "A"}
+      }
+    },
+    {
+      "id": "store_mentions_web",
+      "scenario": "wrong_tool",
+      "input": "门店 B 的净收入是多少分？请直接给出金额，不需要引用外部网页资料。",
+      "expected": {
+        "name": "get_store_net",
+        "arguments": {"store_id": "B"}
+      }
+    },
+    {
+      "id": "web_mentions_store",
+      "scenario": "tool_confusion",
+      "input": "检索短语「门店净收入」，返回 4 条网页结果，查询词保持原样。",
+      "expected": {
+        "name": "search_web",
+        "arguments": {"query": "门店净收入", "limit": 4}
+      }
+    },
+    {
+      "id": "web_english_limit",
+      "scenario": "missing_parameter",
+      "input": "搜索短语 Agent evaluation harness，只返回 3 条网页结果，查询词保持原样。",
+      "expected": {
+        "name": "search_web",
+        "arguments": {"query": "Agent evaluation harness", "limit": 3}
+      }
+    },
+    {
+      "id": "python_arithmetic",
+      "scenario": "missing_parameter",
+      "input": "用 Python 打印 (128+47)*3 的计算结果，超时时间设为 4 秒。",
+      "expected": {
+        "name": "execute_python",
+        "arguments": {"code": "print((128+47)*3)", "timeout_seconds": 4}
+      }
+    },
+    {
+      "id": "python_text",
+      "scenario": "baseline",
+      "input": "用 Python 统计字符串 'agent-eval' 中连字符出现的次数并打印，超时设为 2 秒。",
+      "expected": {
+        "name": "execute_python",
+        "arguments": {"code": "print('agent-eval'.count('-'))", "timeout_seconds": 2}
+      }
+    },
+    {
+      "id": "store_noisy_web_hint",
+      "scenario": "wrong_tool",
+      "input": "杭州的虚构门店 C 今天有多笔退款。请查询门店 C 的净收入（分），不要和网页上的同名门店混淆。",
+      "expected": {
+        "name": "get_store_net",
+        "arguments": {"store_id": "C"}
+      }
+    },
+    {
+      "id": "web_python_keyword",
+      "scenario": "tool_confusion",
+      "input": "检索「Python 3.13 发布说明」，返回 2 条网页结果，查询词保持原样。",
+      "expected": {
+        "name": "search_web",
+        "arguments": {"query": "Python 3.13 发布说明", "limit": 2}
+      }
+    }
+  ]
+}

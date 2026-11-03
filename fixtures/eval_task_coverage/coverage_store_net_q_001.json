@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.1",
+  "task_id": "coverage_store_net_q_001",
+  "task_type": "store_net",
+  "rubric_id": "store_net_v1",
+  "rubric_sha256": "fe86a82f7d4efc004140620c83e69e3088b53d8c503e0b046a8229f03085898f",
+  "input": {
+    "user_request": "请查询门店 Q 的订单净收入，扣除退款后以分为单位回答。"
+  },
+  "environment": {
+    "fixture_path": "fixtures/business_data/coverage_extra_orders.csv",
+    "fixture_sha256": "e6916a0134ab1cacb54a420c89269d54aad1f6addd570d017869f4350a11b768"
+  },
+  "oracle": {
+    "expected_amount_fen": 17300,
+    "required_tool_call": {
+      "name": "get_store_net",
+      "arguments": {
+        "store_id": "Q"
+      }
+    }
+  },
+  "provenance": {
+    "kind": "synthetic",
+    "source_ref": "fixtures/business_data/coverage_extra_orders.csv"
+  },
+  "label_status": "adjudicated"
+}

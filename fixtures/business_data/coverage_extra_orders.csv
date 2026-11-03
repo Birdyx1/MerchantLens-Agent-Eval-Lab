@@ -1,0 +1,6 @@
+order_id,store_id,paid_fen,refunded_fen
+X201,Q,13800,1500
+X202,Q,7200,6100
+X203,R,5100,300
+X204,Q,4600,700
+X205,R,8400,1200
