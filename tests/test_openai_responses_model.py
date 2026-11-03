@@ -76,3 +76,44 @@ def test_deepseek_adapter_uses_official_responses_endpoint(monkeypatch):
     ))
     assert captured["url"] == "https://api.deepseek.com/responses"
     assert result.input_tokens == 8
+
+
+def test_temperature_is_sent_only_when_explicitly_fixed(monkeypatch):
+    captured = {}
+
+    def fake_post(url, **kwargs):
+        captured.update(kwargs)
+        return FakeResponse(_payload())
+
+    monkeypatch.setattr("merchant_agent.agent.openai_responses_model.requests.post", fake_post)
+    asyncio.run(DeepSeekResponsesModel("deepseek-flash", "test-key",
+                                       temperature=0.0).generate(
+        [{"role": "user", "content": "hi"}]))
+    assert captured["json"]["temperature"] == 0.0
+
+    asyncio.run(DeepSeekResponsesModel("deepseek-flash", "test-key").generate(
+        [{"role": "user", "content": "hi"}]))
+    assert "temperature" not in captured["json"]
+
+
+def test_max_output_tokens_is_sent_only_when_configured(monkeypatch):
+    captured = {}
+
+    def fake_post(url, **kwargs):
+        captured.update(kwargs)
+        return FakeResponse(_payload())
+
+    monkeypatch.setattr("merchant_agent.agent.openai_responses_model.requests.post", fake_post)
+    asyncio.run(DeepSeekResponsesModel("deepseek-flash", "test-key",
+                                       max_output_tokens=4096).generate(
+        [{"role": "user", "content": "hi"}]))
+    assert captured["json"]["max_output_tokens"] == 4096
+
+    asyncio.run(DeepSeekResponsesModel("deepseek-flash", "test-key").generate(
+        [{"role": "user", "content": "hi"}]))
+    assert "max_output_tokens" not in captured["json"]
+
+
+def test_negative_max_output_tokens_rejected():
+    with pytest.raises(ValueError):
+        OpenAIResponsesModel("model", "key", max_output_tokens=0)

@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.2",
+  "task_id": "attribution_store_refund_001",
+  "task_type": "attribution",
+  "rubric_id": "attribution_v1",
+  "rubric_sha256": "9b4e246e447e7e0b4ee9b16502fb0e8236bf4d5bdf46056f82082789fe0ea31c",
+  "input": {
+    "user_request": "哪个门店的退款率（退款金额/支付金额）最高？请用 SQL 拆解并给出该门店的退款率。"
+  },
+  "environment": {
+    "fixture_path": "fixtures/business_data/analytics_orders.csv",
+    "fixture_sha256": "1f3a5fb654f39fd0a8d0d82fa8c7e86b248e372677b89621306c832dc71c0289"
+  },
+  "oracle": {
+    "expected_facts": [
+      {"label": "最高退款率门店=S8", "all_of": ["S8"]}
+    ],
+    "required_query_evidence": ["store_id"]
+  },
+  "provenance": {
+    "kind": "synthetic",
+    "source_ref": "fixtures/business_data/analytics_orders.csv"
+  },
+  "label_status": "draft"
+}

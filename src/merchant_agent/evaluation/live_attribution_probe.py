@@ -42,7 +42,8 @@ async def main() -> Path:
                          "sha256": hashlib.sha256(path.read_bytes()).hexdigest()})
 
     key, model_name = _config()
-    model = DeepSeekResponsesModel(model_name, key)
+    # 归因题 SQL 较长，给足输出空间，避免 JSON 被截断。
+    model = DeepSeekResponsesModel(model_name, key, max_output_tokens=4096)
     probe_id = uuid.uuid4().hex
     directory = ROOT / "runs" / "attribution_probe" / probe_id
     directory.mkdir(parents=True, exist_ok=False, mode=0o700)

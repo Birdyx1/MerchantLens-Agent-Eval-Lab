@@ -17,6 +17,8 @@ class OpenAIResponsesModel:
     api_key: str
     endpoint: str = "https://api.openai.com/v1/responses"
     timeout_seconds: float = 30.0
+    temperature: float | None = None
+    max_output_tokens: int | None = None
 
     def __post_init__(self) -> None:
         if not self.model.strip() or not self.api_key.strip():
@@ -27,10 +29,30 @@ class OpenAIResponsesModel:
                 or not isinstance(self.timeout_seconds, (int, float))
                 or not math.isfinite(self.timeout_seconds) or self.timeout_seconds <= 0):
             raise ValueError("模型请求超时必须为正数")
+        if (self.temperature is not None
+                and (isinstance(self.temperature, bool)
+                     or not isinstance(self.temperature, (int, float))
+                     or not math.isfinite(self.temperature)
+                     or not 0 <= self.temperature <= 2)):
+            raise ValueError("模型 temperature 必须为空或 0~2 的有限数")
+        if (self.max_output_tokens is not None
+                and (isinstance(self.max_output_tokens, bool)
+                     or not isinstance(self.max_output_tokens, int)
+                     or self.max_output_tokens < 1)):
+            raise ValueError("max_output_tokens 必须为空或正整数")
 
     async def generate(self, messages: list[dict[str, str]]) -> ModelResponse:
         """在线程中执行同步 HTTP 请求，保持 LangGraph 节点的异步接口。"""
         return await asyncio.to_thread(self._generate_sync, messages)
+
+    def _payload(self, input_messages: list[dict[str, str]]) -> dict:
+        """只在显式配置时发送解码参数，保留旧调用方的接口默认值。"""
+        payload = {"model": self.model, "input": input_messages, "store": False}
+        if self.temperature is not None:
+            payload["temperature"] = self.temperature
+        if self.max_output_tokens is not None:
+            payload["max_output_tokens"] = self.max_output_tokens
+        return payload
 
     def _generate_sync(self, messages: list[dict[str, str]]) -> ModelResponse:
         input_messages = []
@@ -49,7 +71,7 @@ class OpenAIResponsesModel:
         response = requests.post(
             self.endpoint,
             headers={"Authorization": f"Bearer {self.api_key}"},
-            json={"model": self.model, "input": input_messages, "store": False},
+            json=self._payload(input_messages),
             timeout=self.timeout_seconds,
         )
         response.raise_for_status()
