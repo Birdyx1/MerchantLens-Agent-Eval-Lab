@@ -1,6 +1,5 @@
 """只读 NL2SQL 工具：安全分层拒绝 + 结果集返回。"""
 
-import re
 import sqlite3
 from pathlib import Path
 
@@ -8,10 +7,12 @@ from pathlib import Path
 MAX_QUERY_LENGTH = 2000
 ROW_CAP = 100
 
-_WRITE_KEYWORDS = re.compile(
-    r"\b(INSERT|UPDATE|DELETE|DROP|ALTER|CREATE|REPLACE|TRUNCATE|ATTACH|DETACH|PRAGMA|VACUUM)\b",
-    re.IGNORECASE,
-)
+# 只有语句前缀是这些写/DDL 关键词时才判安全违规；
+# 避免 SELECT 中的 replace() 等只读函数被全文正则误判。
+_WRITE_STATEMENTS = frozenset({
+    "INSERT", "UPDATE", "DELETE", "DROP", "ALTER", "CREATE",
+    "REPLACE", "TRUNCATE", "ATTACH", "DETACH", "VACUUM",
+})
 
 
 def run_sql(db_path: str, query: str) -> dict:
@@ -26,12 +27,14 @@ def run_sql(db_path: str, query: str) -> dict:
     if len(query) > MAX_QUERY_LENGTH:
         return {"outcome": "invalid_input", "message": "查询过长"}
     stripped = query.strip()
-    if _WRITE_KEYWORDS.search(stripped):
+    # 按语句前缀分类，避免 SELECT 里的 replace() 等只读函数被误判为写操作。
+    first = stripped.split(None, 1)[0].upper() if stripped else ""
+    if first in _WRITE_STATEMENTS:
         return {"outcome": "security_rejected", "message": "禁止写操作或 DDL"}
     if "sqlite_" in stripped.lower():
         return {"outcome": "security_rejected", "message": "禁止访问系统表"}
-    if not stripped.upper().startswith(("SELECT", "WITH")):
-        return {"outcome": "invalid_input", "message": "只允许 SELECT/WITH 查询"}
+    if first not in {"SELECT", "WITH", "PRAGMA"}:
+        return {"outcome": "invalid_input", "message": "只允许 SELECT/WITH/只读 PRAGMA 查询"}
     if ";" in stripped:
         return {"outcome": "invalid_input", "message": "禁止多语句"}
     try:

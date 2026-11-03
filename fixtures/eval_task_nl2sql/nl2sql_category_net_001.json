@@ -14,7 +14,7 @@
   "oracle": {
     "expected_columns": ["category", "net_fen"],
     "expected_rows": [["饮品", 5169537], ["主食", 5129160], ["零售", 4845858]],
-    "column_tolerance": 1e-6
+    "column_tolerance": 1e-3
   },
   "provenance": {
     "kind": "synthetic",

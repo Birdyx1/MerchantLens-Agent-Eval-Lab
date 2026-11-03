@@ -61,3 +61,16 @@ def test_row_cap_truncates(tmp_path):
     result = run_sql(str(db), "SELECT * FROM orders")
     assert result["row_count"] == 100
     assert result["truncated"] is True
+
+
+def test_select_replace_function_is_not_security(tmp_path):
+    # replace() 是只读函数，不应因关键字出现在 SELECT 中就被判 security_rejected。
+    db = _seed_db(tmp_path)
+    result = run_sql(str(db), "SELECT replace(store_id, 'A', 'a') AS s FROM orders")
+    assert result["outcome"] != "security_rejected"
+
+
+def test_pragma_table_info_is_allowed(tmp_path):
+    db = _seed_db(tmp_path)
+    result = run_sql(str(db), "PRAGMA table_info(orders)")
+    assert result["outcome"] != "security_rejected"

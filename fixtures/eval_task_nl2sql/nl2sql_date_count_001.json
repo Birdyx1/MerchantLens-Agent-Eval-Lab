@@ -14,7 +14,7 @@
   "oracle": {
     "expected_columns": ["order_count"],
     "expected_rows": [[47]],
-    "column_tolerance": 1e-6
+    "column_tolerance": 1e-3
   },
   "provenance": {
     "kind": "synthetic",

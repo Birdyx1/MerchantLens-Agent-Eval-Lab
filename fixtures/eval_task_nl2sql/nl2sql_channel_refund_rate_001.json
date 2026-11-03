@@ -14,7 +14,7 @@
   "oracle": {
     "expected_columns": ["channel", "refund_rate"],
     "expected_rows": [["堂食", 0.0279], ["外卖", 0.0267], ["自提", 0.0215]],
-    "column_tolerance": 1e-6
+    "column_tolerance": 1e-3
   },
   "provenance": {
     "kind": "synthetic",

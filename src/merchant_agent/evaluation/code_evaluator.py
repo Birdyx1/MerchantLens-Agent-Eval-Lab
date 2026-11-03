@@ -93,13 +93,23 @@ def _value_matches(actual, expected, tolerance: float) -> bool:
     return str(actual) == str(expected)
 
 
+def _columns_match(result_set: dict, expected_columns: tuple[str, ...]) -> bool:
+    """列名集合匹配（大小写不敏感）。"""
+    columns = result_set.get("columns") or []
+    return {str(column).lower() for column in columns} == {str(name).lower() for name in expected_columns}
+
+
 def _align_rows(result_set: dict, expected_columns: tuple[str, ...]) -> list[list] | None:
-    """按 expected_columns 顺序重排结果集的行；列名集合不匹配返回 None。"""
+    """按 expected_columns 顺序重排结果集的行；列名集合（大小写不敏感）不匹配返回 None。"""
     columns = result_set.get("columns") or []
     rows = result_set.get("rows") or []
-    if set(columns) != set(expected_columns):
+    actual_by_lower: dict[str, str] = {}
+    for column in columns:
+        actual_by_lower.setdefault(str(column).lower(), column)
+    expected_lower = [str(name).lower() for name in expected_columns]
+    if set(actual_by_lower) != set(expected_lower):
         return None
-    index = [columns.index(name) for name in expected_columns]
+    index = [columns.index(actual_by_lower[name]) for name in expected_lower]
     return [[row[i] for i in index] for row in rows]
 
 
@@ -129,16 +139,20 @@ def _nl2sql_checks(task, spans, trace_valid: bool, eligible: bool) -> dict:
                   if span["attributes"].get("outcome") == "success"]
     expected_columns = tuple(task.expected_columns or ())
     matched = None
-    # 优先取列集合与 Oracle 匹配的结果；agent 探索时先跑别的查询也不会误判。
-    for span in successful:
+    # 取最后一个“列匹配且未截断”的结果；探索时先跑的截断/错误查询不会污染评分。
+    for span in reversed(successful):
         result_set = span["attributes"].get("result_set")
-        if isinstance(result_set, dict) and set(result_set.get("columns") or []) == set(expected_columns):
+        if (isinstance(result_set, dict) and _columns_match(result_set, expected_columns)
+                and not result_set.get("truncated")):
             matched = result_set
             break
-    if matched is None and successful:
-        candidate = successful[-1]["attributes"].get("result_set")
-        if isinstance(candidate, dict):
-            matched = candidate
+    if matched is None:
+        # 没有非截断匹配时取最后一个匹配（可能 truncated，评测会判失败）。
+        for span in reversed(successful):
+            result_set = span["attributes"].get("result_set")
+            if isinstance(result_set, dict) and _columns_match(result_set, expected_columns):
+                matched = result_set
+                break
     truncated = bool(matched and matched.get("truncated"))
     rows_match = False
     if matched is not None and not truncated:
