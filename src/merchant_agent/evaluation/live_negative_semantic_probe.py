@@ -10,8 +10,10 @@ from merchant_agent.evaluation.negative_input import NegativeInputCase
 from merchant_agent.evaluation.negative_semantic_judge import judge_negative_input_semantics
 
 ROOT = Path(__file__).resolve().parents[3]
-PROBE_ID = "692d58ce42a4492a90e6789bd6d1a1e4"
-PROBE = ROOT / "runs" / "negative_input_probe" / PROBE_ID / "results.json"
+PROBE_ROOT = ROOT / "runs" / "negative_input_probe"
+PROBE_DIR = max((path for path in PROBE_ROOT.iterdir() if path.is_dir()),
+                key=lambda path: path.stat().st_mtime)
+PROBE = PROBE_DIR / "results.json"
 CASES = ROOT / "fixtures/negative_input_candidates.json"
 
 
