@@ -29,3 +29,22 @@ def test_report_rejects_changed_task_snapshot():
     candidate["manifest"][0]["sha256"] = "different"
     with pytest.raises(ValueError, match="不一致"):
         compare_batches(_batch("baseline", 1.0), candidate)
+
+
+def test_report_renders_safety_veto_at_top():
+    report = compare_batches(_batch("baseline", 1.0), _batch("candidate", 1.0), safety={
+        "passed": False, "verdict": "veto", "evaluated": 12,
+        "violations": [{"case_id": "c1", "reason": "hard_constraint_failed"}],
+    })
+    text = render_markdown(report)
+    assert "安全门禁：VETO" in text
+    assert text.index("VETO") < text.index("集合：")
+
+
+def test_report_renders_safety_pass_at_top():
+    report = compare_batches(_batch("baseline", 1.0), _batch("candidate", 1.0), safety={
+        "passed": True, "verdict": "pass", "evaluated": 12, "violations": [],
+    })
+    text = render_markdown(report)
+    assert "安全门禁：PASS" in text
+    assert text.index("PASS") < text.index("集合：")

@@ -3,7 +3,7 @@
 from collections import Counter
 
 
-def compare_batches(baseline: dict, candidate: dict) -> dict:
+def compare_batches(baseline: dict, candidate: dict, safety: dict | None = None) -> dict:
     """只比较同集合、同 Task 快照和同重复次数的完整批次。"""
     if baseline.get("status") != "completed" or candidate.get("status") != "completed":
         raise ValueError("只能比较完整批次")
@@ -36,6 +36,7 @@ def compare_batches(baseline: dict, candidate: dict) -> dict:
         "delta_success_rate": new - old,
         "candidate_failures": dict(sorted(failures.items())),
         "candidate_safety_gate": candidate["aggregate"]["safety"]["release_gate"],
+        "safety": safety,
         "evidence": [item["trial_id"] for item in candidate["items"]],
     }
 
@@ -43,13 +44,24 @@ def compare_batches(baseline: dict, candidate: dict) -> dict:
 def render_markdown(report: dict) -> str:
     """给出可以审阅的首版摘要；不把小样本差值写成显著提升。"""
     old, new = report["baseline"], report["candidate"]
-    lines = ["# 首版 Agent 规则评测报告", "",
-             f"集合：{report['collection']}；Task 数：{report['tasks']}；每题重复：{report['repeats']}。", "",
-             "| 配置 | 模型 | Harness | 总体通过率 |", "|---|---|---|---:|",
-             f"| 基线 | {old['model_version']} | {old['harness_version']} | {old['success_rate']:.1%} |",
-             f"| 候选 | {new['model_version']} | {new['harness_version']} | {new['success_rate']:.1%} |", "",
-             f"通过率差值：{report['delta_success_rate']:+.1%}。小样本差值不等于统计显著提升。", "",
-             "## 候选版本失败判据", ""]
+    lines = ["# 首版 Agent 规则评测报告", ""]
+    # 安全一票否决结论放在顶部：任何违规都比通过率优先。
+    safety = report.get("safety")
+    if safety:
+        if safety.get("passed"):
+            lines.append("> **安全门禁：PASS**（未发现安全违规）")
+        else:
+            lines.append("> **安全门禁：VETO**（以下违规一票否决本次发布）")
+            for violation in safety.get("violations", []):
+                lines.append(f"> - `{violation.get('case_id')}`：{violation.get('reason')}")
+        lines.append("")
+    lines += [
+        f"集合：{report['collection']}；Task 数：{report['tasks']}；每题重复：{report['repeats']}。", "",
+        "| 配置 | 模型 | Harness | 总体通过率 |", "|---|---|---|---:|",
+        f"| 基线 | {old['model_version']} | {old['harness_version']} | {old['success_rate']:.1%} |",
+        f"| 候选 | {new['model_version']} | {new['harness_version']} | {new['success_rate']:.1%} |", "",
+        f"通过率差值：{report['delta_success_rate']:+.1%}。小样本差值不等于统计显著提升。", "",
+        "## 候选版本失败判据", ""]
     lines.extend(f"- {key}: {count}" for key, count in report["candidate_failures"].items())
     if not report["candidate_failures"]:
         lines.append("- 无")
