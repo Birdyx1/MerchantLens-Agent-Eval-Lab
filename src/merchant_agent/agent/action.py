@@ -10,8 +10,21 @@ from merchant_agent.agent.state import AgentState
 from merchant_agent.tools.python_sandbox.failure_classification import classify_python_result
 from merchant_agent.tracing.observed_python import execute_python_observed
 from merchant_agent.tracing.observed_search import search_web_observed
-from merchant_agent.tracing.observed_sql import call_store_net_observed
+from merchant_agent.tracing.observed_sql import call_run_sql_observed, call_sql_tool_observed
 from merchant_agent.tracing.tool_failure import ObservedToolFailure
+
+
+# SQL 指标工具：工具名 -> (结果字段名, 允许的返回类型)。
+# result_fen 单位分，result_count 为订单数，result_rate 为 0 到 1 的退款率。
+SQL_METRICS = {
+    "get_store_net": ("result_fen", (int,)),
+    "get_store_order_count": ("result_count", (int,)),
+    "get_store_refund_rate": ("result_rate", (float,)),
+    "get_store_aov": ("result_fen", (int,)),
+    "get_store_paid_total": ("result_fen", (int,)),
+    "get_store_refunded_total": ("result_fen", (int,)),
+    "get_store_refunded_order_count": ("result_count", (int,)),
+}
 
 
 def make_tool_node(client, trace_path: str) -> Callable[[AgentState], Awaitable[dict]]:
@@ -35,12 +48,23 @@ def make_tool_node(client, trace_path: str) -> Callable[[AgentState], Awaitable[
             attempt=attempt,
         )
         try:
-            if name == "get_store_net":
-                value = await call_store_net_observed(client, arguments["store_id"], **common)
+            if name in SQL_METRICS:
+                result_field, allowed_types = SQL_METRICS[name]
+                value = await call_sql_tool_observed(
+                    client, name, arguments,
+                    result_field=result_field, allowed_types=allowed_types, **common,
+                )
                 observation = {
                     "tool_name": name,
                     "outcome": "empty_result" if value is None else "success",
-                    "result_fen": value,
+                    result_field: value,
+                }
+            elif name == "run_sql":
+                result = await call_run_sql_observed(client, arguments["query"], **common)
+                observation = {
+                    "tool_name": name,
+                    "outcome": result["outcome"],
+                    "result_set": result,
                 }
             elif name == "search_web":
                 snapshot = await search_web_observed(

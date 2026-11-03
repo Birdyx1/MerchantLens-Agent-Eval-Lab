@@ -14,11 +14,18 @@ from merchant_agent.tracing.writer import append_span
 
 PLANNING_INSTRUCTION = (
     "你是商家经营分析 Agent 的规划器。只返回一个 JSON 对象，不要 Markdown。"
+    "当前日期：2026-11-03。"
     "格式：{\"plan\":[\"简短步骤\"],\"action\":{\"type\":\"tool\","
     "\"name\":\"工具名\",\"arguments\":{...}}}；"
     "若已能回答，action 使用 {\"type\":\"finish\",\"answer\":\"答案\"}。"
-    "工具仅有 get_store_net(store_id)、search_web(query,limit)、"
-    "execute_python(code,timeout_seconds)。plan 只写可执行步骤摘要，不输出隐藏推理。"
+    "可用 run_sql(query) 执行只读 SELECT/WITH 查询；数据库表："
+    "orders(order_id,store_id,order_date,category,channel,paid_fen,refunded_fen)、"
+    "stores(store_id,store_name,region,city)。"
+    "门店指标工具 get_store_net/get_store_paid_total/get_store_refunded_total/"
+    "get_store_order_count/get_store_refunded_order_count/get_store_refund_rate/"
+    "get_store_aov 接受 store_id。"
+    "另有 search_web(query,limit) 与 execute_python(code,timeout_seconds)。"
+    "plan 只写可执行步骤摘要，不输出隐藏推理。"
 )
 
 REFLECTION_INSTRUCTION = (
@@ -42,14 +49,25 @@ class PlanningDecision:
     final_answer: str | None
 
 
+STORE_ID_TOOLS = frozenset({
+    "get_store_net", "get_store_order_count", "get_store_refund_rate", "get_store_aov",
+    "get_store_paid_total", "get_store_refunded_total", "get_store_refunded_order_count",
+})
+
+
 def valid_tool_arguments(name: str, arguments: object) -> bool:
     """按工具公开参数契约校验，不让模型选择部署配置。"""
     if not isinstance(arguments, dict):
         return False
-    if name == "get_store_net":
+    if name in STORE_ID_TOOLS:
         return (set(arguments) == {"store_id"}
                 and isinstance(arguments["store_id"], str)
                 and bool(arguments["store_id"].strip()))
+    if name == "run_sql":
+        return (set(arguments) == {"query"}
+                and isinstance(arguments["query"], str)
+                and bool(arguments["query"].strip())
+                and len(arguments["query"]) <= 2000)
     if name == "search_web":
         return (set(arguments) == {"query", "limit"}
                 and isinstance(arguments["query"], str)
@@ -109,10 +127,13 @@ def validate_reflection_decision(state: AgentState, decision: PlanningDecision) 
         raise ValueError("失败后不能原样重复同一工具调用")
 
 
-def make_plan_node(model: ModelPort, trace_path: str | None = None) -> Callable[[AgentState], Awaitable[dict]]:
+def make_plan_node(model: ModelPort, trace_path: str | None = None, *,
+                   planning_instruction: str = PLANNING_INSTRUCTION) -> Callable[[AgentState], Awaitable[dict]]:
     """注入模型适配器，返回只负责一次规划的异步节点。"""
+    if not planning_instruction.strip():
+        raise ValueError("规划指令不能为空")
     async def plan_node(state: AgentState) -> dict:
-        instructions = [{"role": "system", "content": PLANNING_INSTRUCTION}]
+        instructions = [{"role": "system", "content": planning_instruction}]
         observation = state["last_tool_result"]
         if isinstance(observation, dict) and observation.get("outcome") in FAILURE_OUTCOMES:
             instructions.append({"role": "system", "content": REFLECTION_INSTRUCTION})

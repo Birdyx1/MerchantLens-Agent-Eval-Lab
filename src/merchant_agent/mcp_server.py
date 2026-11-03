@@ -6,6 +6,7 @@ from merchant_agent.tools.python_sandbox.python_result import PythonRunResult
 from merchant_agent.tools.search.search_provider import SearchProvider
 from merchant_agent.tools.search.search_snapshot import SearchSnapshot, make_search_snapshot
 from merchant_agent.tools.sql import sql_query
+from merchant_agent.tools.sql.run_sql import run_sql as run_sql_query
 
 
 def create_server(
@@ -34,6 +35,36 @@ def create_server(
         """查询指定门店的净收入，单位为分；门店不存在时返回空值。"""
         return sql_query.get_store_net(db_path, store_id)
 
+    @server.tool()
+    def get_store_order_count(store_id: str) -> int | None:
+        """查询指定门店的订单数；门店不存在时返回空值。"""
+        return sql_query.get_store_order_count(db_path, store_id)
+
+    @server.tool()
+    def get_store_refund_rate(store_id: str) -> float | None:
+        """查询指定门店的退款率（已退款金额/已支付金额，0 到 1 的小数）；门店不存在时返回空值。"""
+        return sql_query.get_store_refund_rate(db_path, store_id)
+
+    @server.tool()
+    def get_store_aov(store_id: str) -> int | None:
+        """查询指定门店的客单价（已支付金额/订单数，单位为分，向下取整）；门店不存在时返回空值。"""
+        return sql_query.get_store_aov(db_path, store_id)
+
+    @server.tool()
+    def get_store_paid_total(store_id: str) -> int | None:
+        """查询指定门店的已支付总额，单位为分；门店不存在时返回空值。"""
+        return sql_query.get_store_paid_total(db_path, store_id)
+
+    @server.tool()
+    def get_store_refunded_total(store_id: str) -> int | None:
+        """查询指定门店的已退款总额，单位为分；门店不存在时返回空值。"""
+        return sql_query.get_store_refunded_total(db_path, store_id)
+
+    @server.tool()
+    def get_store_refunded_order_count(store_id: str) -> int | None:
+        """查询指定门店发生过退款的订单数；门店不存在时返回空值。"""
+        return sql_query.get_store_refunded_order_count(db_path, store_id)
+
     if search_provider is not None:
 
         @server.tool()
@@ -48,5 +79,10 @@ def create_server(
         def execute_python(code: str, timeout_seconds: int) -> PythonRunResult:
             """在受限容器中执行 Python 代码并返回结构化结果。"""
             return python_executor(code, timeout_seconds)
+
+    @server.tool()
+    def run_sql(query: str) -> dict:
+        """执行只读 SQL 查询，返回列与行；仅允许 SELECT/WITH。"""
+        return run_sql_query(db_path, query)
 
     return server

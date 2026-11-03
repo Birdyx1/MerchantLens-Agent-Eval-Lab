@@ -55,10 +55,13 @@ def test_real_subprocess_tool_discovery_and_sql_call(tmp_path):
         db.execute("CREATE TABLE orders (order_id TEXT, store_id TEXT, paid_fen INTEGER, refunded_fen INTEGER)")
         db.execute("INSERT INTO orders VALUES ('1', 'A', 15000, 3000)")
 
+    sql_tools = {"get_store_net", "get_store_order_count", "get_store_refund_rate",
+                 "get_store_aov", "get_store_paid_total", "get_store_refunded_total",
+                 "get_store_refunded_order_count", "run_sql"}
     for search, python, names in [
-        (False, False, {"get_store_net"}),
-        (True, False, {"get_store_net", "search_web"}),
-        (True, True, {"get_store_net", "search_web", "execute_python"}),
+        (False, False, sql_tools),
+        (True, False, sql_tools | {"search_web"}),
+        (True, True, sql_tools | {"search_web", "execute_python"}),
     ]:
         assert asyncio.run(discover_stdio_tools(
             db_path, enable_search=search, enable_python=python)) == names
