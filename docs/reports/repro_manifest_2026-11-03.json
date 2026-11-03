@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "experiment": "2026-11-03-multitype",
+  "created_at": "2026-11-03T14:34:46.974117+00:00",
+  "data": {
+    "fixtures/business_data/analytics_orders.csv": "1f3a5fb654f39fd0a8d0d82fa8c7e86b248e372677b89621306c832dc71c0289",
+    "fixtures/business_data/analytics_orders_2m.csv": "12ad54da55dea3a45a6752b856a11284914436e4f80627761d1e57642a9e1047",
+    "fixtures/business_data/coverage_extra_orders.csv": "e6916a0134ab1cacb54a420c89269d54aad1f6addd570d017869f4350a11b768",
+    "fixtures/business_data/coverage_orders.csv": "9104bab71753c6e5adc32e1efc97dd3c0f4632a4c15c48f3f8e874cc58f22a95",
+    "fixtures/business_data/orders.csv": "9232d5b93703763ecaddf657efdab2566e117c6f75632fcddc380d58299ebdab",
+    "fixtures/business_data/pilot_orders.csv": "6785a9e2cd388cdcd3c6f72425763db34d5ab5525c768b5f5dace17de20469fb",
+    "fixtures/business_data/stores.csv": "57df973791c7a47912e2974862cca55b01d63596c60c4ad62e8508663586b65a",
+    "fixtures/business_data/trap_orders.csv": "2fc4a514b2262d06a5ecbc6238291526efecfb6bbda4aa4f427593b8c3c74775"
+  },
+  "commands": [
+    "PYTHONPATH=src .venv/bin/python -m merchant_agent.evaluation.live_anomaly_scan",
+    "PYTHONPATH=src .venv/bin/python -m merchant_agent.evaluation.live_safety_gate_demo",
+    "PYTHONPATH=src .venv/bin/python -m merchant_agent.evaluation.live_standard_report",
+    ".venv/bin/python -m pytest -q"
+  ]
+}
