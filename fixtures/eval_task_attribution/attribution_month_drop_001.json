@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.2",
+  "task_id": "attribution_month_drop_001",
+  "task_type": "attribution",
+  "rubric_id": "attribution_v1",
+  "rubric_sha256": "9b4e246e447e7e0b4ee9b16502fb0e8236bf4d5bdf46056f82082789fe0ea31c",
+  "input": {
+    "user_request": "2026 年 10 月比 9 月的净收入变化如何？请用 SQL 拆解到品类维度，找出拖累最大的品类。"
+  },
+  "environment": {
+    "fixture_path": "fixtures/business_data/analytics_orders_2m.csv",
+    "fixture_sha256": "12ad54da55dea3a45a6752b856a11284914436e4f80627761d1e57642a9e1047"
+  },
+  "oracle": {
+    "expected_facts": [
+      {"label": "拖累最大品类=零售", "all_of": ["零售"]}
+    ],
+    "required_query_evidence": ["category"]
+  },
+  "provenance": {
+    "kind": "synthetic",
+    "source_ref": "fixtures/business_data/analytics_orders_2m.csv"
+  },
+  "label_status": "draft"
+}
