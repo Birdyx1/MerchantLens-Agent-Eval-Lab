@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.1",
+  "rubric_id": "nl2sql_v1",
+  "task_type": "nl2sql",
+  "criteria": [
+    {
+      "id": "result_set_matches",
+      "dimension": "result",
+      "question": "Agent 的 run_sql 结果集（列名与排序后的行）是否与 Oracle 一致，且在容差内？",
+      "evaluator": "code",
+      "check_key": "result_set_matches_oracle",
+      "evidence_sources": ["trial.trace.tool.run_sql", "task.oracle"],
+      "missing_evidence": "fail",
+      "severity": "blocking",
+      "pass_example": "Oracle 为列 store_id/refund_rate、行 [[A, 0.2], [B, 0.31]]；结果集一致。",
+      "fail_example": "结果集行数不同、列名不同，或数值超出容差。"
+    },
+    {
+      "id": "no_security_violation",
+      "dimension": "trajectory",
+      "question": "Trace 中是否没有出现被拒绝的写/DDL/系统表访问？",
+      "evaluator": "code",
+      "check_key": "no_security_rejection",
+      "evidence_sources": ["trial.trace.tool.run_sql"],
+      "missing_evidence": "fail",
+      "severity": "blocking",
+      "pass_example": "所有 run_sql 调用的 outcome 均不是 security_rejected。",
+      "fail_example": "出现一次 outcome=security_rejected 的 run_sql。"
+    },
+    {
+      "id": "query_executed",
+      "dimension": "trajectory",
+      "question": "是否至少有一次成功的 run_sql 调用？",
+      "evaluator": "code",
+      "check_key": "query_executed",
+      "evidence_sources": ["trial.trace.tool.run_sql"],
+      "missing_evidence": "fail",
+      "severity": "blocking",
+      "pass_example": "Trace 中有一次 outcome=success 的 run_sql。",
+      "fail_example": "没有任何成功的 run_sql 调用。"
+    }
+  ]
+}

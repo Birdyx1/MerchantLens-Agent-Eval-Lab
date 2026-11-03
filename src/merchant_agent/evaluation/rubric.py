@@ -10,17 +10,41 @@ from jsonschema import Draft202012Validator
 from merchant_agent.evaluation.task import EvalTask
 
 
-# 代码检查项的证据契约：后续实现 Grader 时保持同名和相同数据来源。
+# 代码检查项的证据契约：按题型分组，后续实现 Grader 时保持同名和相同数据来源。
 CHECK_CONTRACTS = {
-    "answer_amount_equals_oracle": (
-        "result", frozenset({"trial.final_answer", "task.oracle"})
-    ),
-    "required_tool_call": (
-        "trajectory", frozenset({"trial.trace.tool.get_store_net", "task.oracle"})
-    ),
-    "answer_matches_tool_result": (
-        "trajectory", frozenset({"trial.final_answer", "trial.trace.tool.get_store_net"})
-    ),
+    "store_net": {
+        "answer_amount_equals_oracle": (
+            "result", frozenset({"trial.final_answer", "task.oracle"})
+        ),
+        "required_tool_call": (
+            "trajectory", frozenset({"trial.trace.tool.get_store_net", "task.oracle"})
+        ),
+        "answer_matches_tool_result": (
+            "trajectory", frozenset({"trial.final_answer", "trial.trace.tool.get_store_net"})
+        ),
+    },
+    "store_net_sum": {
+        "total_amount_equals_oracle": (
+            "result", frozenset({"trial.final_answer", "task.oracle"})
+        ),
+        "required_tool_calls": (
+            "trajectory", frozenset({"trial.trace.tool.get_store_net", "task.oracle"})
+        ),
+        "answer_matches_tool_sum": (
+            "trajectory", frozenset({"trial.final_answer", "trial.trace.tool.get_store_net"})
+        ),
+    },
+    "nl2sql": {
+        "result_set_matches_oracle": (
+            "result", frozenset({"trial.trace.tool.run_sql", "task.oracle"})
+        ),
+        "no_security_rejection": (
+            "trajectory", frozenset({"trial.trace.tool.run_sql"})
+        ),
+        "query_executed": (
+            "trajectory", frozenset({"trial.trace.tool.run_sql"})
+        ),
+    },
 }
 
 
@@ -56,12 +80,15 @@ def load_rubric(path: Path, *, project_root: Path) -> Rubric:
     Draft202012Validator(schema).validate(data)
     if path.stem != data["rubric_id"]:
         raise ValueError("Rubric 文件名与 ID 不一致")
+    contracts = CHECK_CONTRACTS.get(data["task_type"])
+    if contracts is None:
+        raise ValueError("未知题型")
     checks = [item["check_key"] for item in data["criteria"]]
     ids = [item["id"] for item in data["criteria"]]
-    if len(set(ids)) != len(ids) or set(checks) != set(CHECK_CONTRACTS) or len(set(checks)) != len(checks):
+    if len(set(ids)) != len(ids) or set(checks) != set(contracts) or len(set(checks)) != len(checks):
         raise ValueError("Rubric 判据缺失或重复")
     for item in data["criteria"]:
-        dimension, evidence = CHECK_CONTRACTS[item["check_key"]]
+        dimension, evidence = contracts[item["check_key"]]
         if item["dimension"] != dimension or frozenset(item["evidence_sources"]) != evidence:
             raise ValueError("Rubric 判据的维度或证据来源不匹配")
         if item["pass_example"] == item["fail_example"]:

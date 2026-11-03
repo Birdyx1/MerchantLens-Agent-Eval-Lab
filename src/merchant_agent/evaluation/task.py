@@ -12,7 +12,10 @@ from jsonschema import Draft202012Validator
 
 @dataclass(frozen=True, slots=True)
 class EvalTask:
-    """固定评测任务；Oracle 留在评测侧，不作为模型输入。"""
+    """固定评测任务；Oracle 留在评测侧，不作为模型输入。
+
+    兼容两种题型：store_net（单门店净收入）与 store_net_sum（两门店净收入合计）。
+    """
 
     task_id: str
     task_type: str
@@ -20,11 +23,19 @@ class EvalTask:
     rubric_sha256: str
     user_request: str
     fixture_path: Path
-    expected_amount_fen: int
-    required_tool_name: str
-    required_tool_arguments: Mapping[str, str]
+    # store_net 专用；store_net_sum 时为 None。
+    expected_amount_fen: int | None
+    required_tool_name: str | None
+    required_tool_arguments: Mapping[str, str] | None
     provenance_kind: str
     label_status: str
+    # store_net_sum 专用；store_net 时为 None。
+    expected_total_fen: int | None = None
+    required_tool_calls: tuple[Mapping[str, str], ...] | None = None
+    # nl2sql 专用；其他题型为 None。
+    expected_columns: tuple[str, ...] | None = None
+    expected_rows: tuple[tuple, ...] | None = None
+    column_tolerance: float = 1e-6
 
     def agent_input(self) -> str:
         """只返回被测 Agent 可以看到的请求文本。"""
@@ -48,18 +59,49 @@ def load_eval_task(path: Path, *, project_root: Path) -> EvalTask:
         raise ValueError("评测环境文件哈希不匹配")
 
     oracle = data["oracle"]
+    task_type = data["task_type"]
+    expected_amount_fen = None
+    required_tool_name = None
+    required_tool_arguments = None
+    expected_total_fen = None
+    required_tool_calls = None
+    expected_columns = None
+    expected_rows = None
+    column_tolerance = 1e-6
+    if task_type == "store_net":
+        expected_amount_fen = oracle["expected_amount_fen"]
+        required_tool_name = oracle["required_tool_call"]["name"]
+        required_tool_arguments = MappingProxyType(dict(oracle["required_tool_call"]["arguments"]))
+    elif task_type == "store_net_sum":
+        required_tool_name = oracle["required_tool_calls"][0]["name"]
+        expected_total_fen = oracle["expected_total_fen"]
+        required_tool_calls = tuple(
+            MappingProxyType(dict(call["arguments"])) for call in oracle["required_tool_calls"]
+        )
+    elif task_type == "nl2sql":
+        expected_columns = tuple(oracle["expected_columns"])
+        expected_rows = tuple(tuple(row) for row in oracle["expected_rows"])
+        column_tolerance = float(oracle.get("column_tolerance", 1e-6))
+    else:
+        raise ValueError("未知题型")
+
     return EvalTask(
         task_id=data["task_id"],
-        task_type=data["task_type"],
+        task_type=task_type,
         rubric_id=data["rubric_id"],
         rubric_sha256=data["rubric_sha256"],
         user_request=data["input"]["user_request"],
         fixture_path=fixture,
-        expected_amount_fen=oracle["expected_amount_fen"],
-        required_tool_name=oracle["required_tool_call"]["name"],
-        required_tool_arguments=MappingProxyType(dict(oracle["required_tool_call"]["arguments"])),
+        expected_amount_fen=expected_amount_fen,
+        required_tool_name=required_tool_name,
+        required_tool_arguments=required_tool_arguments,
         provenance_kind=data["provenance"]["kind"],
         label_status=data["label_status"],
+        expected_total_fen=expected_total_fen,
+        required_tool_calls=required_tool_calls,
+        expected_columns=expected_columns,
+        expected_rows=expected_rows,
+        column_tolerance=column_tolerance,
     )
 
 

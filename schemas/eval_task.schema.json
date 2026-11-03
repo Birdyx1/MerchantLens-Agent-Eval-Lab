@@ -1,13 +1,13 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Merchant Agent Eval Task v1.1",
+  "title": "Merchant Agent Eval Task v1.2",
   "type": "object",
   "required": ["schema_version", "task_id", "task_type", "rubric_id", "rubric_sha256", "input", "environment", "oracle", "provenance", "label_status"],
   "additionalProperties": false,
   "properties": {
-    "schema_version": {"const": "1.1"},
+    "schema_version": {"enum": ["1.1", "1.2"]},
     "task_id": {"type": "string", "pattern": "^[a-z][a-z0-9_-]{2,63}$"},
-    "task_type": {"const": "store_net"},
+    "task_type": {"enum": ["store_net", "store_net_sum", "nl2sql"]},
     "rubric_id": {"type": "string", "pattern": "^[a-z][a-z0-9_-]{2,63}$"},
     "rubric_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "input": {
@@ -21,22 +21,7 @@
         "fixture_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
       }
     },
-    "oracle": {
-      "type": "object", "required": ["expected_amount_fen", "required_tool_call"], "additionalProperties": false,
-      "properties": {
-        "expected_amount_fen": {"type": "integer", "minimum": 0},
-        "required_tool_call": {
-          "type": "object", "required": ["name", "arguments"], "additionalProperties": false,
-          "properties": {
-            "name": {"const": "get_store_net"},
-            "arguments": {
-              "type": "object", "required": ["store_id"], "additionalProperties": false,
-              "properties": {"store_id": {"type": "string", "minLength": 1}}
-            }
-          }
-        }
-      }
-    },
+    "oracle": {"type": "object"},
     "provenance": {
       "type": "object", "required": ["kind", "source_ref"], "additionalProperties": false,
       "properties": {
@@ -45,5 +30,59 @@
       }
     },
     "label_status": {"enum": ["draft", "adjudicated"]}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"task_type": {"const": "store_net"}}},
+      "then": {"properties": {"oracle": {"$ref": "#/$defs/store_net_oracle"}}}
+    },
+    {
+      "if": {"properties": {"task_type": {"const": "store_net_sum"}}},
+      "then": {"properties": {"oracle": {"$ref": "#/$defs/store_net_sum_oracle"}}}
+    },
+    {
+      "if": {"properties": {"task_type": {"const": "nl2sql"}}},
+      "then": {"properties": {"oracle": {"$ref": "#/$defs/nl2sql_oracle"}}}
+    }
+  ],
+  "$defs": {
+    "single_tool_call": {
+      "type": "object", "required": ["name", "arguments"], "additionalProperties": false,
+      "properties": {
+        "name": {"const": "get_store_net"},
+        "arguments": {
+          "type": "object", "required": ["store_id"], "additionalProperties": false,
+          "properties": {"store_id": {"type": "string", "minLength": 1}}
+        }
+      }
+    },
+    "store_net_oracle": {
+      "type": "object", "required": ["expected_amount_fen", "required_tool_call"], "additionalProperties": false,
+      "properties": {
+        "expected_amount_fen": {"type": "integer", "minimum": 0},
+        "required_tool_call": {"$ref": "#/$defs/single_tool_call"}
+      }
+    },
+    "store_net_sum_oracle": {
+      "type": "object", "required": ["expected_total_fen", "required_tool_calls"], "additionalProperties": false,
+      "properties": {
+        "expected_total_fen": {"type": "integer", "minimum": 0},
+        "required_tool_calls": {
+          "type": "array", "minItems": 2, "maxItems": 2,
+          "items": {"$ref": "#/$defs/single_tool_call"}
+        }
+      }
+    },
+    "nl2sql_oracle": {
+      "type": "object", "required": ["expected_columns", "expected_rows"], "additionalProperties": false,
+      "properties": {
+        "expected_columns": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "expected_rows": {"type": "array", "items": {"type": "array"}},
+        "column_tolerance": {"type": "number", "minimum": 0}
+      }
+    }
   }
 }
