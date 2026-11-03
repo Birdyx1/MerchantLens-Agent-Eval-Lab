@@ -138,6 +138,28 @@ def _nl2sql_trajectory(trial: dict, task, score: dict) -> dict:
     }
 
 
+def _attribution_trajectory(trial: dict, task, score: dict) -> dict:
+    """归因题轨迹：关键事实 + 查询证据覆盖 + 无越权。"""
+    checks = {
+        "facts_present": _passed(score, "facts_present"),
+        "query_evidence_present": _passed(score, "query_evidence_present"),
+        "no_security_rejection": _passed(score, "no_security_rejection"),
+    }
+    trajectory_passed = checks["query_evidence_present"] and checks["no_security_rejection"]
+    return {
+        "trial_id": trial.get("trial_id"),
+        "task_id": task.task_id,
+        "trace_valid": score["trace_valid"],
+        "checks": checks,
+        "result_passed": checks["facts_present"],
+        "trajectory_passed": trajectory_passed,
+        "passed": checks["facts_present"] and trajectory_passed,
+        "failure_mode": ("invalid_trace" if not score["trace_valid"] else
+                         "missing_fact" if not checks["facts_present"] else
+                         "missing_evidence_or_security" if not trajectory_passed else None),
+    }
+
+
 def evaluate_trial_trajectory(trial: dict, task_path: Path, *, project_root: Path) -> dict:
     """复用可信 Trace 门禁；正确答案还必须有先规划、后取证、再结束的链路。"""
     score = evaluate_trial(trial, task_path, project_root=project_root)
@@ -148,4 +170,6 @@ def evaluate_trial_trajectory(trial: dict, task_path: Path, *, project_root: Pat
         return _store_net_sum_trajectory(trial, task, score, project_root)
     if task.task_type == "nl2sql":
         return _nl2sql_trajectory(trial, task, score)
+    if task.task_type == "attribution":
+        return _attribution_trajectory(trial, task, score)
     raise ValueError("未知题型")

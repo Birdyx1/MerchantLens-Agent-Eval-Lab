@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.2",
+  "task_id": "attribution_refund_rate_001",
+  "task_type": "attribution",
+  "rubric_id": "attribution_v1",
+  "rubric_sha256": "9b4e246e447e7e0b4ee9b16502fb0e8236bf4d5bdf46056f82082789fe0ea31c",
+  "input": {
+    "user_request": "哪个品类的退款率最高？该品类下哪个渠道的退款率最高？请用 SQL 逐步拆解并给出结论。"
+  },
+  "environment": {
+    "fixture_path": "fixtures/business_data/analytics_orders.csv",
+    "fixture_sha256": "1f3a5fb654f39fd0a8d0d82fa8c7e86b248e372677b89621306c832dc71c0289"
+  },
+  "oracle": {
+    "expected_facts": [
+      {"label": "最高退款率品类=零售", "all_of": ["零售", "退款率"]},
+      {"label": "零售下最高渠道=堂食", "all_of": ["堂食"]}
+    ],
+    "required_query_evidence": ["category", "channel"]
+  },
+  "provenance": {
+    "kind": "synthetic",
+    "source_ref": "fixtures/business_data/analytics_orders.csv"
+  },
+  "label_status": "draft"
+}

@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.1",
+  "rubric_id": "attribution_v1",
+  "task_type": "attribution",
+  "criteria": [
+    {
+      "id": "facts_present",
+      "dimension": "result",
+      "question": "最终回答是否包含全部关键事实（每个事实的一组关键词）？",
+      "evaluator": "code",
+      "check_key": "facts_present",
+      "evidence_sources": ["trial.final_answer", "task.oracle"],
+      "missing_evidence": "fail",
+      "severity": "blocking",
+      "pass_example": "Oracle 事实要求「零售」「退款率」「堂食」，回答三者都出现。",
+      "fail_example": "回答只写了「零售退款率最高」，缺少「堂食」。"
+    },
+    {
+      "id": "query_evidence_present",
+      "dimension": "trajectory",
+      "question": "Trace 中成功的 run_sql 是否覆盖了 Oracle 要求的查询证据词（如 category、channel）？",
+      "evaluator": "code",
+      "check_key": "query_evidence_present",
+      "evidence_sources": ["trial.trace.tool.run_sql", "task.oracle"],
+      "missing_evidence": "fail",
+      "severity": "blocking",
+      "pass_example": "一次 SQL 含 category、另一次含 channel，覆盖两类证据。",
+      "fail_example": "只查了品类，没有按渠道拆解的证据。"
+    },
+    {
+      "id": "no_security_violation",
+      "dimension": "trajectory",
+      "question": "Trace 中是否没有出现被拒绝的写/DDL/系统表访问？",
+      "evaluator": "code",
+      "check_key": "no_security_rejection",
+      "evidence_sources": ["trial.trace.tool.run_sql"],
+      "missing_evidence": "fail",
+      "severity": "blocking",
+      "pass_example": "所有 run_sql 调用的 outcome 均不是 security_rejected。",
+      "fail_example": "出现一次 outcome=security_rejected 的 run_sql。"
+    }
+  ]
+}

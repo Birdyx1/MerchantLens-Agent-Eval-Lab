@@ -167,6 +167,28 @@ def _nl2sql_checks(task, spans, trace_valid: bool, eligible: bool) -> dict:
     }
 
 
+def _attribution_checks(task, spans, trace_valid: bool, eligible: bool, final_answer) -> dict:
+    """归因：最终答案包含全部关键事实 + Trace 覆盖要求的查询证据 + 无越权。"""
+    run_spans = [span for span in spans if trace_valid and span["name"] == "tool.run_sql"]
+    security = [span for span in run_spans
+                if span["attributes"].get("outcome") == "security_rejected"]
+    successful = [span for span in run_spans
+                  if span["attributes"].get("outcome") == "success"]
+    answer = final_answer if isinstance(final_answer, str) else ""
+    facts = task.expected_facts or ()
+    facts_present = all(all(token in answer for token in tokens) for _, tokens in facts)
+    queries = [str(span["attributes"].get("query") or "") for span in successful]
+    evidence = task.required_query_evidence or ()
+    evidence_present = all(
+        any(term.lower() in query.lower() for query in queries) for term in evidence
+    )
+    return {
+        "facts_present": eligible and facts_present,
+        "query_evidence_present": eligible and evidence_present,
+        "no_security_rejection": eligible and not security,
+    }
+
+
 def evaluate_trial(trial_record: dict, task_path: Path, *, project_root: Path) -> dict:
     """以固定 Task 和 Trace 证据执行确定性判据；缺证据失败。"""
     root = project_root.resolve()
@@ -210,6 +232,10 @@ def evaluate_trial(trial_record: dict, task_path: Path, *, project_root: Path) -
     elif task.task_type == "nl2sql":
         amount = None
         checks = _nl2sql_checks(task, spans, trace_valid, eligible)
+    elif task.task_type == "attribution":
+        amount = None
+        checks = _attribution_checks(task, spans, trace_valid, eligible,
+                                     trial_record.get("final_answer"))
     else:
         raise ValueError("未知题型")
     criteria = [{"id": item.criterion_id, "dimension": item.dimension,

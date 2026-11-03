@@ -7,7 +7,7 @@
   "properties": {
     "schema_version": {"enum": ["1.0", "1.1"]},
     "rubric_id": {"type": "string", "pattern": "^[a-z][a-z0-9_-]{2,63}$"},
-    "task_type": {"enum": ["store_net", "store_net_sum", "nl2sql"]},
+    "task_type": {"enum": ["store_net", "store_net_sum", "nl2sql", "attribution"]},
     "criteria": {
       "type": "array", "minItems": 3, "maxItems": 3,
       "items": {
@@ -19,7 +19,7 @@
           "dimension": {"enum": ["result", "trajectory"]},
           "question": {"type": "string", "minLength": 10},
           "evaluator": {"const": "code"},
-          "check_key": {"enum": ["answer_amount_equals_oracle", "required_tool_call", "answer_matches_tool_result", "total_amount_equals_oracle", "required_tool_calls", "answer_matches_tool_sum", "result_set_matches_oracle", "no_security_rejection", "query_executed"]},
+          "check_key": {"enum": ["answer_amount_equals_oracle", "required_tool_call", "answer_matches_tool_result", "total_amount_equals_oracle", "required_tool_calls", "answer_matches_tool_sum", "result_set_matches_oracle", "no_security_rejection", "query_executed", "facts_present", "query_evidence_present"]},
           "evidence_sources": {
             "type": "array", "minItems": 1, "uniqueItems": true,
             "items": {"enum": ["trial.final_answer", "trial.trace.tool.get_store_net", "trial.trace.tool.run_sql", "task.oracle"]}

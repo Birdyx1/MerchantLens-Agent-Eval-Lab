@@ -45,6 +45,17 @@ CHECK_CONTRACTS = {
             "trajectory", frozenset({"trial.trace.tool.run_sql"})
         ),
     },
+    "attribution": {
+        "facts_present": (
+            "result", frozenset({"trial.final_answer", "task.oracle"})
+        ),
+        "query_evidence_present": (
+            "trajectory", frozenset({"trial.trace.tool.run_sql", "task.oracle"})
+        ),
+        "no_security_rejection": (
+            "trajectory", frozenset({"trial.trace.tool.run_sql"})
+        ),
+    },
 }
 
 
