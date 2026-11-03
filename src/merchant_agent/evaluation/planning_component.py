@@ -23,6 +23,9 @@ def evaluate_planning_case(case: PlanningCase, state: AgentState) -> dict:
     except ValueError as exc:
         return {"case_id": case.case_id, "passed": False, "failure_layer": "model_contract",
                 "observed_route": None, "reason": str(exc)}
+    if decision.tool_name != case.expected_tool or decision.tool_arguments != case.expected_arguments:
+        return {"case_id": case.case_id, "passed": False, "failure_layer": "model_decision",
+                "observed_route": None, "reason": "模型选择的工具或参数与冻结期望不一致"}
     updated = dict(state)
     updated["selected_tool"] = decision.tool_name
     updated["tool_arguments"] = decision.tool_arguments
@@ -32,8 +35,7 @@ def evaluate_planning_case(case: PlanningCase, state: AgentState) -> dict:
     except ValueError as exc:
         return {"case_id": case.case_id, "passed": False, "failure_layer": "harness_route",
                 "observed_route": None, "reason": str(exc)}
-    passed = (route == case.expected_route and decision.tool_name == case.expected_tool
-              and decision.tool_arguments == case.expected_arguments)
+    passed = route == case.expected_route
     return {"case_id": case.case_id, "passed": passed,
             "failure_layer": None if passed else "harness_route",
             "observed_route": route,
@@ -47,4 +49,5 @@ def summarize_planning_cases(results: list[dict]) -> dict:
     return {"cases": len(results), "passed": sum(item["passed"] for item in results),
             "pass_rate": sum(item["passed"] for item in results) / len(results),
             "model_contract_failures": sum(item["failure_layer"] == "model_contract" for item in results),
+            "model_decision_failures": sum(item["failure_layer"] == "model_decision" for item in results),
             "harness_route_failures": sum(item["failure_layer"] == "harness_route" for item in results)}

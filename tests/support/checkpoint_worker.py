@@ -11,6 +11,7 @@ from merchant_agent.agent.action import make_tool_node
 from merchant_agent.agent.graph import build_observation_loop_graph
 from merchant_agent.agent.model_port import ModelResponse
 from merchant_agent.agent.state import initial_state
+from merchant_agent.evaluation.reflection_memory_component import evaluate_memory_snapshot
 from merchant_agent.mcp_server import create_server
 
 
@@ -46,11 +47,20 @@ async def run(mode: str, checkpoint_path: str, db_path: str, trace_path: str) ->
             else:
                 raise ValueError("未知测试模式")
             snapshot = await graph.aget_state(config)
+            memory_check = None
+            if mode == "resume":
+                memory_check = evaluate_memory_snapshot(
+                    case_id="sqlite-resume", snapshot=snapshot.values,
+                    expected_task_id="task-1", expected_trace_id="a" * 32,
+                    expected_observation={"tool_name": "get_store_net", "outcome": "success",
+                                          "result_fen": 12000},
+                )
             return {
                 "next": list(snapshot.next),
                 "final_answer": snapshot.values["final_answer"],
                 "step_count": snapshot.values["step_count"],
                 "trace_id": snapshot.values["trace_id"],
+                "memory_check": memory_check,
             }
 
 

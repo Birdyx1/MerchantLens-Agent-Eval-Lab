@@ -1,12 +1,14 @@
 # Agent 与评测体系总计划
 
-更新时间：2026-11-02（Asia/Shanghai）
+更新时间：2026-11-03（Asia/Shanghai）
 
 今日安排：[2026-11-01 四小时学习计划](lessons/stage01/2026-11-01-plan.md)。
 
 ## 当前进度
 
-- 当前进度：阶段 1、阶段 2 与阶段 3 在项目范围内已完成并复盘；阶段 4 的 4.1～4.3 已通过，4.4～4.6 的流程代码通过，真实双人标注、实际仲裁和 Holdout 预留样本待补；正式四集合及 Holdout 仍为空。阶段 5 的 5.1～5.5 基础代码、5.6 本地真实 MCP/LangGraph 接线及双批次报告生成器通过；正式 DeepSeek 双版本报告仍待真实标注样本、入库和运行。阶段 6 的 6.1～6.5 流程代码通过，6.6 Inspect AI 自建小样本运行通过；真实 Judge 与人工校准数据待补，阶段复盘暂缓。阶段 7 的 7.1 三道 DeepSeek 基座探针一次运行通过、7.2 冻结输出的组件评测代码通过；下一课为 7.3 反思与记忆组件评测。
+- 当前学习焦点：按用户 2026-11-03 的要求**暂停阶段 8**，先补齐[阶段 1～7 的证据与验收缺口](stage01_07_gap_closure.md)。首轮证据审计已通过：Golden/Regression 各 4 题、Holdout 2 题、最新真实批次 16 条 Trial、Task/Trace/评分器摘要一致；[阶段 5 同题双版本试点报告](reports/same_task_harness_2026-11-03.md)已完成；阶段 6 有[4 条真实 Trial 双标校准](reports/judge_calibration_2026-11-03.md)、[6 条受控挑战双标校准](reports/judge_challenge_calibration_2026-11-03.md)、[三对双顺序比较](reports/pairwise_judge_challenges_2026-11-03.md)、[同模型三次调用面板](reports/judge_panel_challenges_2026-11-03.md)、[异构三模型六题试点](reports/siliconflow_heterogeneous_panel_full_2026-11-03.md)、[真实 Agent 裁判正例](reports/live_agent_judge_2026-11-03.md)和[人工构造错误轨迹](reports/agent_judge_counterfactual_2026-11-03.md)；阶段 7 的[32 条真实 Trial 四格实验](reports/model_harness_matrix_2026-11-03.md)已完成。自然失败 Trial、跨题型归因与多裁判分歧复核仍待补。不继续负样例标注或 8.2。
+- 数据闭环试点：D/F/L/M 入 Golden、E/G/P/Q 入 Regression，均已双标一致、共识、冻结数据复算和受控入库；[业务扩充记录](eval_coverage_next.md)与[扩充后重复评测报告](reports/expanded_2026-11-03.md)已生成。两个集合各 4 题×2 次真实 DeepSeek Trial，规则与顺序轨迹均 8/8；样本仍小、单一业务题型，不能宣称稳定能力。先前 G 的 JSON 契约失败和评分器假阴性均保留原证据；固定模型的[提示词 Harness 对照](reports/prompt_harness_ab_2026-11-02.md)未证实候选改进。N 因结果泄露仅作公开校准例；4 条负样例仍为未仲裁候选。独立数据的[私有 Holdout](holdout_protocol.md)已封存，尚未运行模型。
+- 当前进度：阶段 1、阶段 2 与阶段 3 在项目范围内已完成并复盘；阶段 4～7 的代码链路已有试点真实样本、DeepSeek/GLM 四格运行与小样本真人双标校准。失败/边界自然样本、跨业务题型和规模化数据仍待补。阶段 8 的 8.1a 歧义/脏输入硬约束裁判及 8.1b Negative Task 盲标契约通过；对抗题真人双标、仲裁、入库和安全 Trial 仍待完成。之后进入 8.2 提示注入。
 - 已验收课时：63（6.6 已完成框架小规模运行；4.4～4.6 与 5.1～5.6、6.1～6.5 的真实样本或模型校准待补，暂不计入；各课的独立完成情况以对应课时文档为准）。
 - 自 2.6b 起，按学员新要求由教师实现代码并验证，学员重点理解架构设计；每课仍保留文档、验收记录与独立完成情况。
 - 阶段 3 曾短暂改为学员手写参考代码；3.1 后学员再次要求由教师实现，自己理解架构。后续按最新要求执行，保留 3.1 的学员初稿和教师收尾记录。
@@ -102,47 +104,48 @@
 - [4.1 Task 数据契约](lessons/stage04/lesson01.md)：已通过（教师实现）。
 - [4.2 四集合物理隔离](lessons/stage04/lesson02.md)：已通过（教师实现）。
 - [4.3 Rubric 编写](lessons/stage04/lesson03.md)：已通过（教师实现）。
-- [4.4 双人独立标注](lessons/stage04/lesson04.md)：流程代码已通过（教师实现），真实人工双标待补。
-- [4.5 标注一致性与仲裁](lessons/stage04/lesson05.md)：流程代码已通过（教师实现），真实人工结果待补。
-- [4.6 Holdout 与污染防护](lessons/stage04/lesson06.md)：流程代码已通过（教师实现），真实预留样本与运行器接线待补。
+- [4.4 双人独立标注](lessons/stage04/lesson04.md)：8 道正式题有两份不同 reviewer ID 的记录；真实身份与独立性仍需人工审计。
+- [4.5 标注一致性与仲裁](lessons/stage04/lesson05.md)：8 道题共识并独立复算；分歧仲裁实例与有效 κ 待补。
+- [4.6 Holdout 与污染防护](lessons/stage04/lesson06.md)：2 道独立数据题已封存，未运行模型；强访问控制、轮换与近重复审计待补。
 
 ### [阶段 5：Python 评测流水线](lessons/stage05/README.md)
 
-状态：未开始
+状态：进行中；已完成真实单版本试点批次，同题双版本标准对比待补。
 
-- [5.1 Trial 与环境重置](lessons/stage05/lesson01.md)：基础契约已通过（教师实现），真实运行器接线待补。
-- [5.2 Code Evaluator](lessons/stage05/lesson02.md)：规则评分代码已通过（教师实现），真实 Trial 接线待补。
-- [5.3 四类指标](lessons/stage05/lesson03.md)：指标代码已通过（教师实现），真实批量样本待补。
-- [5.4 重复试验与不确定性](lessons/stage05/lesson04.md)：统计代码已通过（教师实现），真实重复运行待补。
-- [5.5 批量执行](lessons/stage05/lesson05.md)：编排代码已通过（教师实现），真实批量运行待补。
-- [5.6 首版小规模评测报告](lessons/stage05/lesson06.md)：报告代码和本地链路通过（教师实现）；正式双版本报告待真实样本。
+- [5.1 Trial 与环境重置](lessons/stage05/lesson01.md)：真实 MCP/LangGraph Trial 已运行，环境连接故障保留。
+- [5.2 Code Evaluator](lessons/stage05/lesson02.md)：真实 Trial 评分已接线；千位分隔符假阴性修正并保留同 Trial 重评证据。
+- [5.3 四类指标](lessons/stage05/lesson03.md)：结果、轨迹和成本有真实观测，安全状态仍 unknown。
+- [5.4 重复试验与不确定性](lessons/stage05/lesson04.md)：8 道正式题各真实重复 2 次，区间仅作试点描述。
+- [5.5 批量执行](lessons/stage05/lesson05.md)：Golden/Regression 各一批真实 8 Trial 已完成。
+- [5.6 首版小规模评测报告](lessons/stage05/lesson06.md)：同一 Regression 任务清单上两版 Harness 各 8 次真实 Trial 的试点对比报告已生成；正式规模与 Judge 校准待补。
 
 ### [阶段 6：裁判与校准](lessons/stage06/README.md)
 
-状态：未开始
+状态：进行中；裁判代码通过，4 条真实 LLM Judge 评分及参与者确认独立的真人双标校准已落盘；失败样本和多裁判待补。
 
-- [6.1 LLM 固定 Rubric 裁判](lessons/stage06/lesson01.md)：契约代码已通过（教师实现），真实 Judge 待补。
-- [6.2 成对比较](lessons/stage06/lesson02.md)：双顺序比较代码已通过（教师实现），真实 Judge 待补。
-- [6.3 多裁判投票](lessons/stage06/lesson03.md)：投票代码已通过（教师实现），真实 Judge 待补。
-- [6.4 Agent 裁判与工具核验](lessons/stage06/lesson04.md)：有界工具循环代码已通过（教师实现），真实 Judge 待补。
-- [6.5 人工抽样校准](lessons/stage06/lesson05.md)：抽样与校准代码已通过（教师实现），真实人工标签待补。
+- [6.1 LLM 固定 Rubric 裁判](lessons/stage06/lesson01.md)：契约代码已通过（教师实现），4 条真实 Trial 评分已完成；负例覆盖待补。
+- [6.2 成对比较](lessons/stage06/lesson02.md)：双顺序比较代码已通过（教师实现），三对受控回答完成真实 GLM 双顺序比较；同题真实 Agent Trial 待补。
+- [6.3 多裁判投票](lessons/stage06/lesson03.md)：投票代码已通过（教师实现），六条受控挑战完成同模型三次调用和硅基流动异构三模型试点；异构面板 5 题有多数结论，其中 1 题错误，另 1 题不完整。
+- [6.4 Agent 裁判与工具核验](lessons/stage06/lesson04.md)：有界工具循环代码已通过（教师实现），一条冻结 Regression 正例和一条人工构造错误轨迹完成真实 GLM 复算与裁决；自然失败 Trial 待补。
+- [6.5 人工抽样校准](lessons/stage06/lesson05.md)：抽样与校准代码已通过（教师实现），4 条真实 Trial 的真人双标同分率及 Judge 一致率均为 4/4；6 条受控挑战 0/1/2 分各两条，人人同分与 Judge 对人工参考分均为 6/6；均不能推断自然分布总体准确率。
 - [6.6 现成评测工具或 Benchmark 实践](lessons/stage06/lesson06.md)：Inspect AI 自建两题运行已通过（教师实现，非公开 Benchmark 成绩）。
 
 ### [阶段 7：分层评测与归因](lessons/stage07/README.md)
 
-状态：未开始
+状态：进行中；[阶段复盘](lessons/stage07/review.md)已记录正式样本缺口。
 
-- [7.1 基座能力准入](lessons/stage07/lesson01.md)：三道真实 DeepSeek 探针通过（教师实现），规模化准入门槛待补。
-- [7.2 规划与路由组件评测](lessons/stage07/lesson02.md)：冻结输出重放与分层归因代码已通过（教师实现），大样本待补。
-- [7.3 反思与记忆组件评测](lessons/stage07/lesson03.md)：未开始。
-- [7.4 端到端轨迹评测](lessons/stage07/lesson04.md)：未开始。
-- [7.5 Model × Harness 实验](lessons/stage07/lesson05.md)：未开始。
+- [7.1 基座能力准入](lessons/stage07/lesson01.md)：四道初版多工具探针之外，新增[八道多工具选择题与双模型重复报告](reports/multi_tool_selection_2026-11-03.md)；覆盖选错工具、参数缺失和多工具混淆，DeepSeek/GLM 各 8 题×2 次，重评后均 16/16，未观察到选错工具或参数错误；GLM 的 Markdown 包裹在显式禁令下 0/16、移除禁令后 2/16，属提示词敏感的格式问题；规模化、自然失败与跨题型待补。
+- [7.2 规划与路由组件评测](lessons/stage07/lesson02.md)：修复模型决策与 Harness 路由的归因分类，32 条真实首步规划本地重放通过；跨题型与自然失败样本待补。
+- [7.3 反思与记忆组件评测](lessons/stage07/lesson03.md)：SQLite 跨进程恢复快照已通过记忆校验；两条人工故障观察的真实 GLM 反思输出通过规则，自然故障与大样本待补。
+- [7.4 端到端轨迹评测](lessons/stage07/lesson04.md)：本地顺序故障注入与正式 Golden/Regression 小样本 16 条真实 Trial 轨迹审计通过；业务多样性待补。
+- [7.5 Model × Harness 实验](lessons/stage07/lesson05.md)：四格交叉分析器与故障测试通过（教师实现）；32 条真实 Trial 的四格批次已完成，四格均 8/8，能力差异不可识别。
 
 ### [阶段 8：对抗与发布门禁](lessons/stage08/README.md)
 
-状态：未开始
+状态：按用户要求暂停；保留 8.1a～8.1b 已有代码，暂不推进。
 
-- [8.1 歧义与脏输入](lessons/stage08/lesson01.md)：未开始。
+- [8.1a 歧义与脏输入硬约束](lessons/stage08/lesson01.md)：用例契约与硬约束裁判通过（教师实现），真实样本和语义复核待补。
+- [8.1b Negative Task 契约与盲标](lessons/stage08/lesson01b.md)：独立 Schema、Rubric、盲标包及提交器通过（教师实现），真人双标待补。
 - [8.2 提示注入](lessons/stage08/lesson02.md)：未开始。
 - [8.3 越权与危险动作](lessons/stage08/lesson03.md)：未开始。
 - [8.4 安全一票否决](lessons/stage08/lesson04.md)：未开始。

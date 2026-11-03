@@ -1,6 +1,6 @@
 # 4.4 双人独立标注
 
-状态：流程代码已通过（教师实现，2026-11-02）；真实两名人工标注者的记录待补。
+状态：流程代码与 8 道正式题、2 道 Holdout 题的双份人工标注试点已完成；用户于 2026-11-03 确认两位不同真人独立完成。本地 ID 仍不能技术证明身份。
 
 [阶段文档](README.md) · [总计划](../../plan.md)
 
@@ -36,3 +36,5 @@ PYTHONPATH=src .venv/bin/python -m merchant_agent.evaluation.annotation_cli subm
 ## 提交与评审记录
 
 2026-11-02：教师实现盲标包、提交记录与 CLI；新增 5 个测试，全套 pytest 134 passed。测试中使用的 reviewer ID 是模拟身份，没有真实双人标注结果。
+
+2026-11-03：D/E/F/G/L/M/P/Q 八道正式题及 H/J 两道 Holdout 题均有两份不同 ID 的记录，用户确认由两名真人独立完成。初始测试记录保留为历史，当前证据见[数据闭环](../../data_closure_pilot.md)与[补齐清单](../../stage01_07_gap_closure.md)。

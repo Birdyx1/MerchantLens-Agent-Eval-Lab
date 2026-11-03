@@ -39,3 +39,11 @@ def test_invalid_model_contract_and_harness_mismatch_have_distinct_roots(monkeyp
     assert bad_model["failure_layer"] == "model_contract"
     assert mismatch["failure_layer"] == "harness_route"
     assert summary["model_contract_failures"] == summary["harness_route_failures"] == 1
+
+
+def test_wrong_store_is_model_decision_not_harness_route():
+    output = json.dumps({"plan": ["查询"], "action": {"type": "tool", "name": "get_store_net",
+                                                       "arguments": {"store_id": "B"}}})
+    result = evaluate_planning_case(PlanningCase("wrong_store", output, "tool",
+                                               "get_store_net", {"store_id": "A"}), _state())
+    assert result["failure_layer"] == "model_decision"

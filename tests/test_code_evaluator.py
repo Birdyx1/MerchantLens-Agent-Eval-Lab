@@ -49,6 +49,20 @@ def test_correct_answer_and_evidence_pass(tmp_path):
     assert [item["passed"] for item in result["criteria"]] == [True, True, True]
 
 
+def test_grouped_thousands_amount_is_accepted(tmp_path):
+    task, _, record = _case(tmp_path, answer="门店 A 净收入为 12,000 分")
+    result = evaluate_trial(record, task, project_root=tmp_path)
+    assert result["passed"] is True
+    assert result["answer_amount_fen"] == 12000
+
+
+def test_malformed_grouping_is_not_partially_parsed(tmp_path):
+    task, _, record = _case(tmp_path, answer="门店 A 净收入为 12,00 分")
+    result = evaluate_trial(record, task, project_root=tmp_path)
+    assert result["answer_amount_fen"] is None
+    assert result["passed"] is False
+
+
 @pytest.mark.parametrize("changes, expected", [
     ({"include_tool": False}, [True, False, False]),
     ({"store_id": "B"}, [True, False, False]),

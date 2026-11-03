@@ -1,0 +1,1882 @@
+{
+  "version": "1.0",
+  "seed": 20261103,
+  "repeats": 3,
+  "scope": "固定子集与项目 JSON prompting 适配；非官方全量榜单分数",
+  "bfcl_commit": "6ea57973c7a6097fd7c5915698c54c17c5b1b6c8",
+  "bird_scorer_commit": "1c49a375e76c471e218564da3f4617513d33e371",
+  "bird_data_commit": "5b256b5a9c17478f06ed6912612e9a14d17065c8",
+  "zip_etag": "\"7BEB6DAB11E65F0FDE563E644A1EA319\"",
+  "sampling": "BFCL 四类别各随机 5 题；BIRD 五库各 4 题，按 simple/moderate/challenging 轮转抽样；均在模型运行前固定",
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/ShishirPatil/gorilla/6ea57973c7a6097fd7c5915698c54c17c5b1b6c8/berkeley-function-call-leaderboard/bfcl_eval/data/BFCL_v4_simple_python.json",
+      "path": "runs/public_benchmarks/sources/bfcl/berkeley-function-call-leaderboard/bfcl_eval/data/BFCL_v4_simple_python.json",
+      "sha256": "82dd63ba502eb2520c6b5d1d9a5c4b590e03ff261565175561f6228a367d1991"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/ShishirPatil/gorilla/6ea57973c7a6097fd7c5915698c54c17c5b1b6c8/berkeley-function-call-leaderboard/bfcl_eval/data/possible_answer/BFCL_v4_simple_python.json",
+      "path": "runs/public_benchmarks/sources/bfcl/berkeley-function-call-leaderboard/bfcl_eval/data/possible_answer/BFCL_v4_simple_python.json",
+      "sha256": "90cd5bc653690ee8e459b5b3f3fc9458606f7f3fcbf795bb51b7dc581f8c86dc"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/ShishirPatil/gorilla/6ea57973c7a6097fd7c5915698c54c17c5b1b6c8/berkeley-function-call-leaderboard/bfcl_eval/data/BFCL_v4_multiple.json",
+      "path": "runs/public_benchmarks/sources/bfcl/berkeley-function-call-leaderboard/bfcl_eval/data/BFCL_v4_multiple.json",
+      "sha256": "aef168155ebd74b7ac2401198b201343bc7d16d7a3d7e0d4e6d8ee82c6969b2a"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/ShishirPatil/gorilla/6ea57973c7a6097fd7c5915698c54c17c5b1b6c8/berkeley-function-call-leaderboard/bfcl_eval/data/possible_answer/BFCL_v4_multiple.json",
+      "path": "runs/public_benchmarks/sources/bfcl/berkeley-function-call-leaderboard/bfcl_eval/data/possible_answer/BFCL_v4_multiple.json",
+      "sha256": "244e00ce9395df948bcafc7bee64e8f9c87ef70887587d83cae45b13699f3047"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/ShishirPatil/gorilla/6ea57973c7a6097fd7c5915698c54c17c5b1b6c8/berkeley-function-call-leaderboard/bfcl_eval/data/BFCL_v4_parallel.json",
+      "path": "runs/public_benchmarks/sources/bfcl/berkeley-function-call-leaderboard/bfcl_eval/data/BFCL_v4_parallel.json",
+      "sha256": "19f51a82eff42e5d62541aa500115a056eb78f437c2ba1f10415fd7c8e5dda84"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/ShishirPatil/gorilla/6ea57973c7a6097fd7c5915698c54c17c5b1b6c8/berkeley-function-call-leaderboard/bfcl_eval/data/possible_answer/BFCL_v4_parallel.json",
+      "path": "runs/public_benchmarks/sources/bfcl/berkeley-function-call-leaderboard/bfcl_eval/data/possible_answer/BFCL_v4_parallel.json",
+      "sha256": "8a6aa19c1adddc6a5a2f7e40f9dbf30cc7e95815e7b830c90589ab318229e0f0"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/ShishirPatil/gorilla/6ea57973c7a6097fd7c5915698c54c17c5b1b6c8/berkeley-function-call-leaderboard/bfcl_eval/data/BFCL_v4_irrelevance.json",
+      "path": "runs/public_benchmarks/sources/bfcl/berkeley-function-call-leaderboard/bfcl_eval/data/BFCL_v4_irrelevance.json",
+      "sha256": "2b6ed4c2e992cdcf5f1678a701851f944bef7550ee026ed1ddb89efed5be01a6"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/ShishirPatil/gorilla/6ea57973c7a6097fd7c5915698c54c17c5b1b6c8/LICENSE",
+      "path": "runs/public_benchmarks/sources/bfcl/LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/ShishirPatil/gorilla/6ea57973c7a6097fd7c5915698c54c17c5b1b6c8/berkeley-function-call-leaderboard/bfcl_eval/eval_checker/ast_eval/ast_checker.py",
+      "path": "runs/public_benchmarks/sources/bfcl/berkeley-function-call-leaderboard/bfcl_eval/eval_checker/ast_eval/ast_checker.py",
+      "sha256": "2aae7a68461a8f76c0be3894c8901b66b56967a1989d3ab066051e3fb97f1538"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/bird-bench/mini_dev/1c49a375e76c471e218564da3f4617513d33e371/README.md",
+      "path": "runs/public_benchmarks/sources/bird/README.md",
+      "sha256": "29a66ebe19085aceaa94beb49b05f03e09eb09784b409078b8615e8500fa869e"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/bird-bench/mini_dev/1c49a375e76c471e218564da3f4617513d33e371/evaluation/evaluation_ex.py",
+      "path": "runs/public_benchmarks/sources/bird/evaluation/evaluation_ex.py",
+      "sha256": "da1bbcd4530be83692d7c650c814ea9704bb710d0c953eb75d02ccb38233cf89"
+    },
+    {
+      "url": "https://huggingface.co/datasets/birdsql/bird_mini_dev/resolve/5b256b5a9c17478f06ed6912612e9a14d17065c8/data/mini_dev_sqlite.jsonl",
+      "path": "runs/public_benchmarks/sources/bird_hf/data/mini_dev_sqlite.jsonl",
+      "sha256": "926af2a0d1b47e5d0d15a7aa8a34d4721007f4550a881555b6a89496b54a2606"
+    },
+    {
+      "url": "https://huggingface.co/datasets/birdsql/bird_mini_dev/resolve/5b256b5a9c17478f06ed6912612e9a14d17065c8/data/manifest.json",
+      "path": "runs/public_benchmarks/sources/bird_hf/data/manifest.json",
+      "sha256": "66ddb0e39e4ee6a443abff8e8f915674ec1602a36e9f1c763f4750414bcf4611"
+    },
+    {
+      "url": "https://huggingface.co/datasets/birdsql/bird_mini_dev/resolve/5b256b5a9c17478f06ed6912612e9a14d17065c8/README.md",
+      "path": "runs/public_benchmarks/sources/bird_hf/README.md",
+      "sha256": "ca606afa71af7ed78b6cb72dccb9108d28ff8e3eaefc521cec044337b5e2d639"
+    },
+    {
+      "url": "https://bird-bench.oss-cn-beijing.aliyuncs.com/minidev.zip#minidev/MINIDEV/dev_databases/california_schools/california_schools.sqlite",
+      "path": "runs/public_benchmarks/sources/bird_databases/california_schools/california_schools.sqlite",
+      "sha256": "c0903eec662e63068fd1d14403d3d6c1d473287fc10c4356333ea58f878db983"
+    },
+    {
+      "url": "https://bird-bench.oss-cn-beijing.aliyuncs.com/minidev.zip#minidev/MINIDEV/dev_databases/student_club/student_club.sqlite",
+      "path": "runs/public_benchmarks/sources/bird_databases/student_club/student_club.sqlite",
+      "sha256": "eb89bcfe97eefa386a27904ec5aa15159811a7eac894ec659a36e48fa9f76b77"
+    },
+    {
+      "url": "https://bird-bench.oss-cn-beijing.aliyuncs.com/minidev.zip#minidev/MINIDEV/dev_databases/thrombosis_prediction/thrombosis_prediction.sqlite",
+      "path": "runs/public_benchmarks/sources/bird_databases/thrombosis_prediction/thrombosis_prediction.sqlite",
+      "sha256": "87583183c3dc472fba04de702965560a9d7c0a548836613f242317e0eeb83f00"
+    },
+    {
+      "url": "https://bird-bench.oss-cn-beijing.aliyuncs.com/minidev.zip#minidev/MINIDEV/dev_databases/toxicology/toxicology.sqlite",
+      "path": "runs/public_benchmarks/sources/bird_databases/toxicology/toxicology.sqlite",
+      "sha256": "35ef27ae6bdfda530e125ed369666ac0abb8bc8c0bcc0ad09407f547ecb61a93"
+    },
+    {
+      "url": "https://bird-bench.oss-cn-beijing.aliyuncs.com/minidev.zip#minidev/MINIDEV/dev_databases/superhero/superhero.sqlite",
+      "path": "runs/public_benchmarks/sources/bird_databases/superhero/superhero.sqlite",
+      "sha256": "75e94a2c3236ee3bb2c01fb97a1c4b4c1c269bcefd4eab1d04be323d2d0825b1"
+    }
+  ],
+  "cases": [
+    {
+      "benchmark": "bfcl",
+      "id": "simple_python_186",
+      "category": "simple_python",
+      "input": {
+        "question": [
+          [
+            {
+              "role": "user",
+              "content": "What is the temperature in celsius and humidity level of Tokyo, Japan right now?"
+            }
+          ]
+        ],
+        "function": [
+          {
+            "name": "current_weather_condition",
+            "description": "Get the current weather conditions of a specific city including temperature and humidity.",
+            "parameters": {
+              "type": "dict",
+              "properties": {
+                "city": {
+                  "type": "string",
+                  "description": "The city that you want to get the current weather conditions for."
+                },
+                "country": {
+                  "type": "string",
+                  "description": "The country of the city you specified."
+                },
+                "measurement": {
+                  "type": "string",
+                  "description": "You can specify which unit to display the temperature in, 'c' for Celsius, 'f' for Fahrenheit. Default is 'c'."
+                }
+              },
+              "required": [
+                "city",
+                "country"
+              ]
+            }
+          }
+        ]
+      },
+      "oracle": [
+        {
+          "current_weather_condition": {
+            "city": [
+              "Tokyo"
+            ],
+            "country": [
+              "Japan"
+            ],
+            "measurement": [
+              "c",
+              ""
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "benchmark": "bfcl",
+      "id": "simple_python_270",
+      "category": "simple_python",
+      "input": {
+        "question": [
+          [
+            {
+              "role": "user",
+              "content": "Can you give me the height and width of Empire State building in feet?"
+            }
+          ]
+        ],
+        "function": [
+          {
+            "name": "building.get_dimensions",
+            "description": "Retrieve the dimensions of a specific building based on its name.",
+            "parameters": {
+              "type": "dict",
+              "properties": {
+                "building_name": {
+                  "type": "string",
+                  "description": "The name of the building."
+                },
+                "unit": {
+                  "type": "string",
+                  "description": "The unit in which you want the dimensions. Default is meter.",
+                  "enum": [
+                    "meter",
+                    "feet"
+                  ]
+                }
+              },
+              "required": [
+                "building_name",
+                "unit"
+              ]
+            }
+          }
+        ]
+      },
+      "oracle": [
+        {
+          "building.get_dimensions": {
+            "building_name": [
+              "Empire State Building",
+              "Empire State"
+            ],
+            "unit": [
+              "feet"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "benchmark": "bfcl",
+      "id": "simple_python_25",
+      "category": "simple_python",
+      "input": {
+        "question": [
+          [
+            {
+              "role": "user",
+              "content": "Calculate the final velocity of an object falling from a 150 meter building, assuming initial velocity is zero."
+            }
+          ]
+        ],
+        "function": [
+          {
+            "name": "calculate_final_velocity",
+            "description": "Calculate the final velocity of a free falling object given the height it's dropped from, the initial velocity and acceleration due to gravity. Ignore air resistance.",
+            "parameters": {
+              "type": "dict",
+              "properties": {
+                "height": {
+                  "type": "integer",
+                  "description": "The height the object is dropped from, in meters."
+                },
+                "initial_velocity": {
+                  "type": "integer",
+                  "description": "The initial velocity of the object in m/s. Default is zero."
+                },
+                "gravity": {
+                  "type": "float",
+                  "description": "Acceleration due to gravity. Default value is 9.81 m/s^2, earth's gravity."
+                }
+              },
+              "required": [
+                "height"
+              ]
+            }
+          }
+        ]
+      },
+      "oracle": [
+        {
+          "calculate_final_velocity": {
+            "height": [
+              150
+            ],
+            "initial_velocity": [
+              0,
+              ""
+            ],
+            "gravity": [
+              9.81,
+              ""
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "benchmark": "bfcl",
+      "id": "simple_python_63",
+      "category": "simple_python",
+      "input": {
+        "question": [
+          [
+            {
+              "role": "user",
+              "content": "Find out how genetically similar a human and a chimp are in percentage."
+            }
+          ]
+        ],
+        "function": [
+          {
+            "name": "genetics.calculate_similarity",
+            "description": "Calculates the genetic similarity between two species based on their DNA sequences.",
+            "parameters": {
+              "type": "dict",
+              "properties": {
+                "species1": {
+                  "type": "string",
+                  "description": "The first species to compare."
+                },
+                "species2": {
+                  "type": "string",
+                  "description": "The second species to compare."
+                },
+                "format": {
+                  "type": "string",
+                  "description": "The format of the result (percentage or fraction). Default is percentage."
+                }
+              },
+              "required": [
+                "species1",
+                "species2"
+              ]
+            }
+          }
+        ]
+      },
+      "oracle": [
+        {
+          "genetics.calculate_similarity": {
+            "species1": [
+              "Human",
+              "human"
+            ],
+            "species2": [
+              "Chimp",
+              "chimp",
+              "Chimpanzee",
+              "chimpanzee"
+            ],
+            "format": [
+              "percentage",
+              ""
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "benchmark": "bfcl",
+      "id": "simple_python_171",
+      "category": "simple_python",
+      "input": {
+        "question": [
+          [
+            {
+              "role": "user",
+              "content": "Fetch details of a law case with number 43403 in New York court for year 2018."
+            }
+          ]
+        ],
+        "function": [
+          {
+            "name": "fetch_law_case_details",
+            "description": "Fetch details of a specific law case based on case number, year and court.",
+            "parameters": {
+              "type": "dict",
+              "properties": {
+                "case_number": {
+                  "type": "integer",
+                  "description": "The specific number of the law case."
+                },
+                "court": {
+                  "type": "string",
+                  "description": "The city name where the court takes place"
+                },
+                "year": {
+                  "type": "integer",
+                  "description": "The year in which the law case took place."
+                }
+              },
+              "required": [
+                "case_number",
+                "court",
+                "year"
+              ]
+            }
+          }
+        ]
+      },
+      "oracle": [
+        {
+          "fetch_law_case_details": {
+            "case_number": [
+              43403
+            ],
+            "court": [
+              "New York"
+            ],
+            "year": [
+              2018
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "benchmark": "bfcl",
+      "id": "multiple_191",
+      "category": "multiple",
+      "input": {
+        "question": [
+          [
+            {
+              "role": "user",
+              "content": "Book a luxury room in Hotel Paradise, Las Vegas, with a city view for 3 days starting from May 12, 2022."
+            }
+          ]
+        ],
+        "function": [
+          {
+            "name": "random.normalvariate",
+            "description": "Generates a random number from a normal distribution given the mean and standard deviation.",
+            "parameters": {
+              "type": "dict",
+              "properties": {
+                "mu": {
+                  "type": "float",
+                  "description": "Mean of the normal distribution."
+                },
+                "sigma": {
+                  "type": "float",
+                  "description": "Standard deviation of the normal distribution."
+                }
+              },
+              "required": [
+                "mu",
+                "sigma"
+              ]
+            }
+          },
+          {
+            "name": "get_personality_traits",
+            "description": "Retrieve the personality traits for a specific personality type, including their strengths and weaknesses.",
+            "parameters": {
+              "type": "dict",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "description": "The personality type."
+                },
+                "traits": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "strengths",
+                      "weaknesses"
+                    ]
+                  },
+                  "description": "List of traits to be retrieved, default is ['strengths', 'weaknesses']."
+                }
+              },
+              "required": [
+                "type"
+              ]
+            }
+          },
+          {
+            "name": "elephant_population_estimate",
+            "description": "Estimate future population of elephants given current population and growth rate.",
+            "parameters": {
+              "type": "dict",
+              "properties": {
+                "current_population": {
+                  "type": "integer",
+                  "description": "The current number of elephants."
+                },
+                "growth_rate": {
+                  "type": "float",
+                  "description": "The annual population growth rate of elephants."
+                },
+                "years": {
+                  "type": "integer",
+                  "description": "The number of years to project the population."
+                }
+              },
+              "required": [
+                "current_population",
+                "growth_rate",
+                "years"
+              ]
+            }
+          },
+          {
+            "name": "book_hotel",
+            "description": "Book a room in a specific hotel with particular preferences",
+            "parameters": {
+              "type": "dict",
+              "properties": {
+                "hotel_name": {
+                  "type": "string",
+                  "description": "The name of the hotel."
+                },
+                "location": {
+                  "type": "string",
+                  "description": "The location of the hotel."
+                },
+                "room_type": {
+                  "type": "string",
+                  "description": "The type of room preferred."
+                },
+                "start_date": {
+                  "type": "string",
+                  "description": "The starting date of the stay in format MM-DD-YYYY."
+                },
+                "stay_duration": {
+                  "type": "integer",
+                  "description": "The duration of the stay in days."
+                },
+                "view": {
+                  "type": "string",
+                  "description": "The preferred view from the room, can be ignored if no preference. If none provided, assumes no preference.",
+                  "default": "No preference"
+                }
+              },
+              "required": [
+                "hotel_name",
+                "location",
+                "room_type",
+                "start_date",
+                "stay_duration"
+              ]
+            }
+          }
+        ]
+      },
+      "oracle": [
+        {
+          "book_hotel": {
+            "hotel_name": [
+              "Hotel Paradise"
+            ],
+            "location": [
+              "Las Vegas",
+              "Las Vegas, NV",
+              "LV"
+            ],
+            "room_type": [
+              "luxury",
+              "Luxury"
+            ],
+            "start_date": [
+              "05-12-2022",
+              "2022-05-12",
+              "12/05/2022",
+              "May.12,2022",
+              "May 12, 2022"
+            ],
+            "stay_duration": [
+              3
+            ],
+            "view": [
+              "city",
+              "city view"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "benchmark": "bfcl",
+      "id": "multiple_118",
+      "category": "multiple",
+      "input": {
+        "question": [
+          [
+            {
+              "role": "user",
+              "content": "Find all movies starring Leonardo DiCaprio in the year 2010 from IMDB database."
+            }
+          ]
+        ],
+        "function": [
+          {
+            "name": "flight.book",
+            "description": "Book a direct flight for a specific date and time from departure location to destination location.",
+            "parameters": {
+              "type": "dict",
+              "properties": {
+                "departure_location": {
+                  "type": "string",
+                  "description": "The location you are departing from."
+                },
+                "destination_location": {
+                  "type": "string",
+                  "description": "The location you are flying to."
+                },
+                "date": {
+                  "type": "string",
+                  "description": "The date of the flight. Accepts standard date format e.g., 2022-04-28."
+                },
+                "time": {
+                  "type": "string",
+                  "description": "Preferred time of flight. Default is 'anytime'."
+                },
+                "direct_flight": {
+                  "type": "boolean",
+                  "description": "If set to true, only direct flights will be searched. Default is false"
+                }
+              },
+              "required": [
+                "departure_location",
+                "destination_location",
+                "date"
+              ]
+            }
+          },
+          {
+            "name": "lawsuits_search",
+            "description": "Search for lawsuits against a specific company within a specific time and location.",
+            "parameters": {
+              "type": "dict",
+              "properties": {
+                "company_name": {
+                  "type": "string",
+                  "description": "The name of the company."
+                },
+                "location": {
+                  "type": "string",
+                  "description": "The location where the lawsuit was filed."
+                },
+                "year": {
+                  "type": "integer",
+                  "description": "The year when the lawsuit was filed."
+                },
+                "case_type": {
+                  "type": "string",
+                  "description": "The type of the case. Options include: 'civil', 'criminal', 'small_claims', etc. If not specified, search for 'all' types by default."
+                }
+              },
+              "required": [
+                "company_name",
+                "location",
+                "year"
+              ]
+            }
+          },
+          {
+            "name": "imdb.find_movies_by_actor",
+            "description": "Searches the database to find all movies by a specific actor within a certain year.",
+            "parameters": {
+              "type": "dict",
+              "properties": {
+                "actor_name": {
+                  "type": "string",
+                  "description": "The name of the actor."
+                },
+                "year": {
+                  "type": "integer",
+                  "description": "The specific year to search in."
+                },
+                "category": {
+                  "type": "string",
+                  "description": "The category of the film (e.g. Drama, Comedy, etc). This parameter is optional. Default is 'all'."
+                }
+              },
+              "required": [
+                "actor_name",
+                "year"
+              ]
+            }
+          }
+        ]
+      },
+      "oracle": [
+        {
+          "imdb.find_movies_by_actor": {
+            "actor_name": [
+              "Leonardo DiCaprio"
+            ],
+            "year": [
+              2010
+            ],
+            "category": [
+              "",
+              "all"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "benchmark": "bfcl",
+      "id": "multiple_111",
+      "category": "multiple",
+      "input": {
+        "question": [
+          [
+            {
+              "role": "user",
+              "content": "What is the genotype frequency of AA genotype in a population, given that allele frequency of A is 0.3?"
+            }
+          ]
+        ],
+        "function": [
+          {
+            "name": "calculate_genotype_frequency",
+            "description": "Calculate the frequency of homozygous dominant genotype based on the allele frequency using Hardy Weinberg Principle.",
+            "parameters": {
+              "type": "dict",
+              "properties": {
+                "allele_frequency": {
+                  "type": "float",
+                  "description": "The frequency of the dominant allele in the population."
+                },
+                "genotype": {
+                  "type": "string",
+                  "description": "The genotype which frequency is needed, default is homozygous dominant. ",
+                  "enum": [
+                    "AA",
+                    "Aa",
+                    "aa"
+                  ]
+                }
+              },
+              "required": [
+                "allele_frequency",
+                "genotype"
+              ]
+            }
+          },
+          {
+            "name": "math.factorial",
+            "description": "Calculate the factorial of a given number.",
+            "parameters": {
+              "type": "dict",
+              "properties": {
+                "number": {
+                  "type": "integer",
+                  "description": "The number for which factorial needs to be calculated."
+                }
+              },
+              "required": [
+                "number"
+              ]
+            }
+          },
+          {
+            "name": "find_flute",
+            "description": "Locate a flute for sale based on specific requirements.",
+            "parameters": {
+              "type": "dict",
+              "properties": {
+                "brand": {
+                  "type": "string",
+                  "description": "The brand of the flute. Example, 'Yamaha'"
+                },
+                "specs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "open hole",
+                      "C foot",
+                      "silver headjoint"
+                    ]
+                  },
+                  "description": "The specifications of the flute desired."
+                }
+              },
+              "required": [
+                "brand",
+                "specs"
+              ]
+            }
+          }
+        ]
+      },
+      "oracle": [
+        {
+          "calculate_genotype_frequency": {
+            "allele_frequency": [
+              0.3
+            ],
+            "genotype": [
+              "AA"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "benchmark": "bfcl",
+      "id": "multiple_25",
+      "category": "multiple",
+      "input": {
+        "question": [
+          [
+            {
+              "role": "user",
+              "content": "What is the cheapest selling price for the game 'Assassins Creed Valhalla' in the PlayStation Store in the United States?"
+            }
+          ]
+        ],
+        "function": [
+          {
+            "name": "video_games.store_currency",
+            "description": "Fetches the currency used in a specific region in a gaming platform store.",
+            "parameters": {
+              "type": "dict",
+              "properties": {
+                "platform": {
+                  "type": "string",
+                  "description": "The gaming platform e.g. PlayStation, Xbox, Nintendo Switch"
+                },
+                "region": {
+                  "type": "string",
+                  "description": "The region e.g. United States, United Kingdom, Japan",
+                  "default": "True"
+                }
+              },
+              "required": [
+                "platform"
+              ]
+            }
+          },
+          {
+            "name": "video_games.on_sale",
+            "description": "Checks if a particular game is currently on sale in a specific gaming platform store and in a specific region.",
+            "parameters": {
+              "type": "dict",
+              "properties": {
+                "game_title": {
+                  "type": "string",
+                  "description": "The title of the video game"
+                },
+                "platform": {
+                  "type": "string",
+                  "description": "The gaming platform e.g. PlayStation, Xbox, Nintendo Switch"
+                },
+                "region": {
+                  "type": "string",
+                  "description": "The region e.g. United States, United Kingdom, Japan. Default United States",
+                  "optional": "True"
+                }
+              },
+              "required": [
+                "game_title",
+                "platform"
+              ]
+            }
+          },
+          {
+            "name": "video_games.store_price",
+            "description": "Fetches the selling price of a specified game in a particular gaming platform store and in a specific region.",
+            "parameters": {
+              "type": "dict",
+              "properties": {
+                "game_title": {
+                  "type": "string",
+                  "description": "The title of the video game"
+                },
+                "platform": {
+                  "type": "string",
+                  "description": "The gaming platform e.g. PlayStation, Xbox, Nintendo Switch"
+                },
+                "region": {
+                  "type": "string",
+                  "description": "The region e.g. United States, United Kingdom, Japan. Default to United States"
+                }
+              },
+              "required": [
+                "game_title",
+                "platform"
+              ]
+            }
+          }
+        ]
+      },
+      "oracle": [
+        {
+          "video_games.store_price": {
+            "game_title": [
+              "Assassins Creed Valhalla"
+            ],
+            "platform": [
+              "PlayStation",
+              "PS"
+            ],
+            "region": [
+              "United States",
+              "US",
+              ""
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "benchmark": "bfcl",
+      "id": "multiple_131",
+      "category": "multiple",
+      "input": {
+        "question": [
+          [
+            {
+              "role": "user",
+              "content": "Find the market performance of the S&P 500 and the Dow Jones over the past 5 days."
+            }
+          ]
+        ],
+        "function": [
+          {
+            "name": "restaurant.find_nearby",
+            "description": "Locate nearby restaurants based on specific dietary preferences.",
+            "parameters": {
+              "type": "dict",
+              "properties": {
+                "location": {
+                  "type": "string",
+                  "description": "The city and state, e.g. Los Angeles, CA"
+                },
+                "dietary_preference": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "Vegan",
+                      "Vegetarian",
+                      "Gluten-free",
+                      "Dairy-free",
+                      "Nut-free"
+                    ]
+                  },
+                  "description": "Dietary preference. Default is empty array."
+                }
+              },
+              "required": [
+                "location"
+              ]
+            }
+          },
+          {
+            "name": "market_performance.get_data",
+            "description": "Retrieve the market performance data for specified indexes over a specified time period.",
+            "parameters": {
+              "type": "dict",
+              "properties": {
+                "indexes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Array of stock market indexes. Supported indexes are 'S&P 500', 'Dow Jones', 'NASDAQ', 'FTSE 100', 'DAX' etc."
+                },
+                "days": {
+                  "type": "integer",
+                  "description": "Number of days in the past for which the performance data is required."
+                },
+                "detailed": {
+                  "type": "boolean",
+                  "description": "Whether to return detailed performance data. If set to true, returns high, low, opening, and closing prices. If false, returns only closing prices. Default is false."
+                }
+              },
+              "required": [
+                "indexes",
+                "days"
+              ]
+            }
+          },
+          {
+            "name": "sports.match_results",
+            "description": "Returns the results of a given match between two teams.",
+            "parameters": {
+              "type": "dict",
+              "properties": {
+                "team1": {
+                  "type": "string",
+                  "description": "The name of the first team."
+                },
+                "team2": {
+                  "type": "string",
+                  "description": "The name of the second team."
+                },
+                "season": {
+                  "type": "string",
+                  "description": "The season when the match happened. Default is the current season."
+                }
+              },
+              "required": [
+                "team1",
+                "team2"
+              ]
+            }
+          }
+        ]
+      },
+      "oracle": [
+        {
+          "market_performance.get_data": {
+            "indexes": [
+              [
+                "S&P 500",
+                "Dow Jones"
+              ]
+            ],
+            "days": [
+              5
+            ],
+            "detailed": [
+              "",
+              false
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "benchmark": "bfcl",
+      "id": "parallel_22",
+      "category": "parallel",
+      "input": {
+        "question": [
+          [
+            {
+              "role": "user",
+              "content": "What is the status and scheduled trial date for case number XY1234 in Los Angeles County Court, and case number GH5678 in Orange County Court?"
+            }
+          ]
+        ],
+        "function": [
+          {
+            "name": "court_info.get_case_status",
+            "description": "Retrieves the status and trial dates for court cases from specified county courts.",
+            "parameters": {
+              "type": "dict",
+              "properties": {
+                "case_number": {
+                  "type": "string",
+                  "description": "The specific court case number."
+                },
+                "court": {
+                  "type": "string",
+                  "description": "The county court where the case is filed."
+                },
+                "details": {
+                  "type": "string",
+                  "enum": [
+                    "status",
+                    "trial_date"
+                  ],
+                  "description": "Specific details required about the court case. Defaults to 'status'."
+                }
+              },
+              "required": [
+                "case_number",
+                "court"
+              ]
+            }
+          }
+        ]
+      },
+      "oracle": [
+        {
+          "court_info.get_case_status": {
+            "case_number": [
+              "XY1234"
+            ],
+            "court": [
+              "Los Angeles County Court",
+              "Los Angeles",
+              "Los Angeles, CA",
+              "LA"
+            ],
+            "details": [
+              "status",
+              ""
+            ]
+          }
+        },
+        {
+          "court_info.get_case_status": {
+            "case_number": [
+              "GH5678"
+            ],
+            "court": [
+              "Orange County Court",
+              "Orange County",
+              "OC"
+            ],
+            "details": [
+              "status",
+              ""
+            ]
+          }
+        },
+        {
+          "court_info.get_case_status": {
+            "case_number": [
+              "XY1234"
+            ],
+            "court": [
+              "Los Angeles County Court",
+              "Los Angeles",
+              "Los Angeles, CA",
+              "LA"
+            ],
+            "details": [
+              "trial_date"
+            ]
+          }
+        },
+        {
+          "court_info.get_case_status": {
+            "case_number": [
+              "GH5678"
+            ],
+            "court": [
+              "Orange County Court",
+              "Orange County",
+              "OC"
+            ],
+            "details": [
+              "trial_date"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "benchmark": "bfcl",
+      "id": "parallel_161",
+      "category": "parallel",
+      "input": {
+        "question": [
+          [
+            {
+              "role": "user",
+              "content": "\"In a game of basketball, a player has a 60% chance of making any given shot. In a series of 10 shots, what is the probability that the player makes exactly 7 shots? Also, in another series of 15 shots, what is the probability that the player makes exactly 10 shots? Finally, in a series of 20 shots, what is the probability that the player makes exactly 15 shots?\""
+            }
+          ]
+        ],
+        "function": [
+          {
+            "name": "calculate_binomial_probability",
+            "description": "Calculates the binomial probability given the number of trials, successes and the probability of success on an individual trial.",
+            "parameters": {
+              "type": "dict",
+              "properties": {
+                "number_of_trials": {
+                  "type": "integer",
+                  "description": "The total number of trials."
+                },
+                "number_of_successes": {
+                  "type": "integer",
+                  "description": "The desired number of successful outcomes."
+                },
+                "probability_of_success": {
+                  "type": "float",
+                  "description": "The probability of a successful outcome on any given trial.",
+                  "default": 0.5
+                }
+              },
+              "required": [
+                "number_of_trials",
+                "number_of_successes"
+              ]
+            }
+          }
+        ]
+      },
+      "oracle": [
+        {
+          "calculate_binomial_probability": {
+            "number_of_trials": [
+              10
+            ],
+            "number_of_successes": [
+              7
+            ],
+            "probability_of_success": [
+              0.6
+            ]
+          }
+        },
+        {
+          "calculate_binomial_probability": {
+            "number_of_trials": [
+              15
+            ],
+            "number_of_successes": [
+              10
+            ],
+            "probability_of_success": [
+              0.6
+            ]
+          }
+        },
+        {
+          "calculate_binomial_probability": {
+            "number_of_trials": [
+              20
+            ],
+            "number_of_successes": [
+              15
+            ],
+            "probability_of_success": [
+              0.6
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "benchmark": "bfcl",
+      "id": "parallel_197",
+      "category": "parallel",
+      "input": {
+        "question": [
+          [
+            {
+              "role": "user",
+              "content": "\"Can you provide me with the details of the lawsuit case with the case number '12345ABC', which was initiated in the year 2018 and filed in the New York court jurisdiction? Also, can you retrieve the same information for another lawsuit case with the case number '67890XYZ', initiated in the year 2019 and filed in the California court jurisdiction?\""
+            }
+          ]
+        ],
+        "function": [
+          {
+            "name": "lawsuit_info",
+            "description": "Retrieves details of a lawsuit given a case number",
+            "parameters": {
+              "type": "dict",
+              "properties": {
+                "case_number": {
+                  "type": "string",
+                  "description": "The unique identifier of the lawsuit case"
+                },
+                "year": {
+                  "type": "integer",
+                  "description": "The year in which the lawsuit case was initiated",
+                  "optional": true,
+                  "default": 2000
+                },
+                "location": {
+                  "type": "string",
+                  "description": "The location or court jurisdiction where the case was filed.",
+                  "optional": true,
+                  "default": "New York"
+                }
+              },
+              "required": [
+                "case_number"
+              ]
+            }
+          }
+        ]
+      },
+      "oracle": [
+        {
+          "lawsuit_info": {
+            "case_number": [
+              "12345ABC"
+            ],
+            "year": [
+              2018
+            ],
+            "location": [
+              "New York",
+              "New York, NY",
+              "NY",
+              ""
+            ]
+          }
+        },
+        {
+          "lawsuit_info": {
+            "case_number": [
+              "67890XYZ"
+            ],
+            "year": [
+              2019
+            ],
+            "location": [
+              "California",
+              "CA"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "benchmark": "bfcl",
+      "id": "parallel_96",
+      "category": "parallel",
+      "input": {
+        "question": [
+          [
+            {
+              "role": "user",
+              "content": "\"In a physics experiment, you are given two charges. The first charge has a magnitude of 5 coulombs and the second charge has a magnitude of 10 coulombs. These charges are placed at a distance of 2 meters from each other. You are asked to calculate the electromagnetic force between these charges. You perform the experiment twice. The first time, the charges are placed in a vacuum, which has a permittivity of 8.854 x 10^-12 F/m. The second time, the charges are placed in a medium with a relative permittivity of 5 x 10^-12 F/m. Can you calculate the electromagnetic force between the charges in both scenarios?\""
+            }
+          ]
+        ],
+        "function": [
+          {
+            "name": "electromagnetic_force",
+            "description": "Calculate the electromagnetic force between two charges placed at a certain distance.",
+            "parameters": {
+              "type": "dict",
+              "properties": {
+                "charge1": {
+                  "type": "integer",
+                  "description": "The magnitude of the first charge in coulombs."
+                },
+                "charge2": {
+                  "type": "integer",
+                  "description": "The magnitude of the second charge in coulombs."
+                },
+                "distance": {
+                  "type": "integer",
+                  "description": "The distance between the two charges in meters."
+                },
+                "medium_permittivity": {
+                  "type": "float",
+                  "description": "The relative permittivity of the medium in which the charges are present. Default is 8.854 x 10^-12 F/m (vacuum permittivity)."
+                }
+              },
+              "required": [
+                "charge1",
+                "charge2",
+                "distance"
+              ]
+            }
+          }
+        ]
+      },
+      "oracle": [
+        {
+          "electromagnetic_force": {
+            "charge1": [
+              5
+            ],
+            "charge2": [
+              10
+            ],
+            "distance": [
+              2
+            ],
+            "medium_permittivity": [
+              8.854e-12,
+              ""
+            ]
+          }
+        },
+        {
+          "electromagnetic_force": {
+            "charge1": [
+              5
+            ],
+            "charge2": [
+              10
+            ],
+            "distance": [
+              2
+            ],
+            "medium_permittivity": [
+              5e-12,
+              ""
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "benchmark": "bfcl",
+      "id": "parallel_76",
+      "category": "parallel",
+      "input": {
+        "question": [
+          [
+            {
+              "role": "user",
+              "content": "What is the greatest common divisor (GCD) of the two pairs of numbers (45, 60) and (81, 27)?"
+            }
+          ]
+        ],
+        "function": [
+          {
+            "name": "math.gcd",
+            "description": "Compute the greatest common divisor of two numbers",
+            "parameters": {
+              "type": "dict",
+              "properties": {
+                "num1": {
+                  "type": "integer",
+                  "description": "The first number."
+                },
+                "num2": {
+                  "type": "integer",
+                  "description": "The second number."
+                }
+              },
+              "required": [
+                "num1",
+                "num2"
+              ]
+            }
+          }
+        ]
+      },
+      "oracle": [
+        {
+          "math.gcd": {
+            "num1": [
+              45
+            ],
+            "num2": [
+              60
+            ]
+          }
+        },
+        {
+          "math.gcd": {
+            "num1": [
+              81
+            ],
+            "num2": [
+              27
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "benchmark": "bfcl",
+      "id": "irrelevance_60",
+      "category": "irrelevance",
+      "input": {
+        "question": [
+          [
+            {
+              "role": "user",
+              "content": "What is the final price of a product after a 25% discount and 10% sales tax has been applied?"
+            }
+          ]
+        ],
+        "function": [
+          {
+            "name": "calculateFinalPrice",
+            "description": "Calculate the final price of a product after a certain discount has been applied and then sales tax added. Price should be positive and the rates can range from 0-1",
+            "parameters": {
+              "type": "dict",
+              "properties": {
+                "price": {
+                  "type": "float",
+                  "description": "Original price of the product."
+                },
+                "discount_rate": {
+                  "type": "float",
+                  "description": "The discount rate in percentage, must be from 0 to 1."
+                },
+                "sales_tax": {
+                  "type": "float",
+                  "description": "The sales tax in percentage, must be from 0 to 1."
+                }
+              },
+              "required": [
+                "price",
+                "discount_rate",
+                "sales_tax"
+              ]
+            }
+          }
+        ]
+      },
+      "oracle": []
+    },
+    {
+      "benchmark": "bfcl",
+      "id": "irrelevance_109",
+      "category": "irrelevance",
+      "input": {
+        "question": [
+          [
+            {
+              "role": "user",
+              "content": "Calculate how much nurtient a cactus in Arizona needs weekly in the summer."
+            }
+          ]
+        ],
+        "function": [
+          {
+            "name": "calculate_water_needs",
+            "description": "Calculate the weekly watering needs of a plant based on its type, location, and time of year.",
+            "parameters": {
+              "type": "dict",
+              "properties": {
+                "plant_type": {
+                  "type": "string",
+                  "description": "The type of plant, e.g. 'cactus'"
+                },
+                "location": {
+                  "type": "string",
+                  "description": "The location where the plant is situated, e.g. 'Arizona'"
+                },
+                "season": {
+                  "type": "string",
+                  "enum": [
+                    "spring",
+                    "summer",
+                    "autumn",
+                    "winter"
+                  ],
+                  "description": "The current season. Default: 'winter'"
+                }
+              },
+              "required": [
+                "plant_type",
+                "location"
+              ]
+            }
+          }
+        ]
+      },
+      "oracle": []
+    },
+    {
+      "benchmark": "bfcl",
+      "id": "irrelevance_183",
+      "category": "irrelevance",
+      "input": {
+        "question": [
+          [
+            {
+              "role": "user",
+              "content": "Who was the winner of Wimbledon Men's Singles in 2021?"
+            }
+          ]
+        ],
+        "function": [
+          {
+            "name": "find_top_sports_celebrity",
+            "description": "Fetches information about a top sports celebrity including basic information, match records, endorsements and net worth.",
+            "parameters": {
+              "type": "dict",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Name of the celebrity."
+                },
+                "year": {
+                  "type": "integer",
+                  "description": "The year in which the celebrity rose to fame or importance."
+                },
+                "sports_type": {
+                  "type": "string",
+                  "description": "The type of sport the celebrity is known for, e.g. Tennis, Basketball, Football.",
+                  "default": "All"
+                }
+              },
+              "required": [
+                "name",
+                "year"
+              ]
+            }
+          }
+        ]
+      },
+      "oracle": []
+    },
+    {
+      "benchmark": "bfcl",
+      "id": "irrelevance_113",
+      "category": "irrelevance",
+      "input": {
+        "question": [
+          [
+            {
+              "role": "user",
+              "content": "Find me restaurants in London"
+            }
+          ]
+        ],
+        "function": [
+          {
+            "name": "find_pois",
+            "description": "Locate points of interest (pois) based on specified criteria.",
+            "parameters": {
+              "type": "dict",
+              "properties": {
+                "location": {
+                  "type": "string",
+                  "description": "The city or region, e.g. London, UK"
+                },
+                "category": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "Restaurants",
+                      "Hotels",
+                      "Tourist spots"
+                    ]
+                  },
+                  "description": "Type of points of interest."
+                },
+                "rating": {
+                  "type": "float",
+                  "description": "Minimum rating to consider",
+                  "default": "0.3"
+                }
+              },
+              "required": [
+                "location",
+                "category"
+              ]
+            }
+          }
+        ]
+      },
+      "oracle": []
+    },
+    {
+      "benchmark": "bfcl",
+      "id": "irrelevance_139",
+      "category": "irrelevance",
+      "input": {
+        "question": [
+          [
+            {
+              "role": "user",
+              "content": "What is the largest planet in the universe?"
+            }
+          ]
+        ],
+        "function": [
+          {
+            "name": "space.star_info",
+            "description": "Retrieve information about a particular star in the universe.",
+            "parameters": {
+              "type": "dict",
+              "properties": {
+                "star_name": {
+                  "type": "string",
+                  "description": "The name of the star."
+                },
+                "information": {
+                  "type": "string",
+                  "enum": [
+                    "mass",
+                    "radius",
+                    "luminosity"
+                  ],
+                  "description": "The type of information needed about the star."
+                }
+              },
+              "required": [
+                "star_name",
+                "information"
+              ]
+            }
+          }
+        ]
+      },
+      "oracle": []
+    },
+    {
+      "benchmark": "bird",
+      "id": "bird_4",
+      "db_id": "california_schools",
+      "difficulty": "simple",
+      "input": {
+        "question": "What are the mailing street address and name of the school with the seventh-highest recorded average mathematics score?",
+        "evidence": ""
+      },
+      "oracle": "SELECT sc.MailStreet, sc.School FROM satscores AS sat JOIN schools AS sc ON sc.CDSCode = sat.cds WHERE sat.rtype = 'S' AND sat.AvgScrMath IS NOT NULL ORDER BY sat.AvgScrMath DESC, sat.cds LIMIT 1 OFFSET 6"
+    },
+    {
+      "benchmark": "bird",
+      "id": "bird_7",
+      "db_id": "california_schools",
+      "difficulty": "moderate",
+      "input": {
+        "question": "What is the Percent (%) Eligible Free (K-12) in the school administered by an administrator whose first name is Alusine. List the district code of the school.",
+        "evidence": "K-12 free-meal eligibility percentage is K-12 free-meal recipients divided by K-12 enrollment, times 100."
+      },
+      "oracle": "SELECT T1.`Free Meal Count (K-12)` * 100 / T1.`Enrollment (K-12)`, T1.`District Code` FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.AdmFName1 = 'Alusine'"
+    },
+    {
+      "benchmark": "bird",
+      "id": "bird_35",
+      "db_id": "california_schools",
+      "difficulty": "challenging",
+      "input": {
+        "question": "A parent is asking about a school and could only give me the CDS code 1612590137943. Can you look up that school and give me its name, county, district, and city; its K-12 enrollment; the number of K-12 students eligible for free or reduced price meals and the percentage eligible (report the percentage exactly as it appears, without rounding); and the SAT results - number of test takers, average reading score, average math score, average writing score, and the number of test takers whose total score is at least 1500?",
+        "evidence": "CDS code: the state's County-District-School identification code assigned to each school; FRPM: the Free or Reduced Price Meal program, where the FRPM count is the number of students eligible."
+      },
+      "oracle": "SELECT s.School AS school_name, s.County AS county, s.District AS district, s.City AS city, f.`Enrollment (K-12)` AS enrollment_k12, f.`FRPM Count (K-12)` AS frpm_count, f.`Percent (%) Eligible FRPM (K-12)` AS pct_eligible_frpm, sat.NumTstTakr AS num_sat_takers, sat.AvgScrRead AS avg_reading, sat.AvgScrMath AS avg_math, sat.AvgScrWrite AS avg_writing, sat.NumGE1500 AS num_ge_1500 FROM schools s JOIN frpm f ON f.CDSCode = s.CDSCode LEFT JOIN satscores sat ON sat.cds = s.CDSCode WHERE CAST(s.CDSCode AS INTEGER) = 1612590137943"
+    },
+    {
+      "benchmark": "bird",
+      "id": "bird_3",
+      "db_id": "california_schools",
+      "difficulty": "moderate",
+      "input": {
+        "question": "What is the ratio of merged Unified School District schools in Orange County to merged Elementary School District schools?",
+        "evidence": ""
+      },
+      "oracle": "SELECT CAST(SUM(CASE WHEN DOC = 54 THEN 1 ELSE 0 END) AS REAL) / SUM(CASE WHEN DOC = 52 THEN 1 ELSE 0 END) FROM schools WHERE StatusType = 'Merged' AND County = 'Orange'"
+    },
+    {
+      "benchmark": "bird",
+      "id": "bird_297",
+      "db_id": "student_club",
+      "difficulty": "simple",
+      "input": {
+        "question": "What note was recorded for the fundraising proceeds received on September 14, 2019?",
+        "evidence": ""
+      },
+      "oracle": "SELECT notes FROM income WHERE source = 'Fundraising' AND date_received = '2019-09-14'"
+    },
+    {
+      "benchmark": "bird",
+      "id": "bird_300",
+      "db_id": "student_club",
+      "difficulty": "moderate",
+      "input": {
+        "question": "List the name of students that have attended more than 7 events.",
+        "evidence": ""
+      },
+      "oracle": "SELECT T1.first_name, T1.last_name FROM member AS T1 INNER JOIN attendance AS T2 ON T1.member_id = T2.link_to_member GROUP BY T2.link_to_member HAVING COUNT(T2.link_to_event) > 7"
+    },
+    {
+      "benchmark": "bird",
+      "id": "bird_313",
+      "db_id": "student_club",
+      "difficulty": "challenging",
+      "input": {
+        "question": "Our officer team wants to settle a debate about whether we pull more weight than the rest of the club, so we need the attendance numbers before the next meeting. Could you tell us two things: the average number of events attended per officer, and the average number of events attended per other student, each rounded to two decimal places? To be clear on who counts where: officers are the members holding the position of President, Vice President, Secretary, or Treasurer, and everyone else in the club counts as an other student. Each average should cover every member of its group, and include every event in the club's records - there's no date cutoff.",
+        "evidence": ""
+      },
+      "oracle": "WITH t AS (SELECT m.member_id, m.position, COUNT(a.link_to_event) AS cnt FROM member m LEFT JOIN attendance a ON a.link_to_member = m.member_id GROUP BY m.member_id, m.position) SELECT ROUND(AVG(CASE WHEN t.position IN ('President','Vice President','Secretary','Treasurer') THEN t.cnt END), 2) AS officer_avg, ROUND(AVG(CASE WHEN t.position NOT IN ('President','Vice President','Secretary','Treasurer') THEN t.cnt END), 2) AS other_students_avg FROM t"
+    },
+    {
+      "benchmark": "bird",
+      "id": "bird_299",
+      "db_id": "student_club",
+      "difficulty": "moderate",
+      "input": {
+        "question": "Which closed events are tied for the highest ratio of total spending to total budget amount?",
+        "evidence": ""
+      },
+      "oracle": "WITH ratios AS ( SELECT e.event_id, e.event_name, CAST(SUM(b.spent) AS DECIMAL(20,4)) / NULLIF(SUM(b.amount), 0) AS ratio FROM event AS e JOIN budget AS b ON b.link_to_event = e.event_id WHERE e.status = 'Closed' GROUP BY e.event_id, e.event_name HAVING SUM(b.amount) > 0 ) SELECT event_name FROM ratios WHERE ratio = (SELECT MAX(ratio) FROM ratios)"
+    },
+    {
+      "benchmark": "bird",
+      "id": "bird_388",
+      "db_id": "thrombosis_prediction",
+      "difficulty": "moderate",
+      "input": {
+        "question": "How many distinct patients have at least one positive CRP laboratory result and no recorded patient description?",
+        "evidence": "Plus-marked CRP results indicate positivity."
+      },
+      "oracle": "SELECT COUNT(DISTINCT p.ID) FROM Patient AS p JOIN Laboratory AS l ON l.ID = p.ID WHERE l.CRP LIKE '%+' AND p.Description IS NULL"
+    },
+    {
+      "benchmark": "bird",
+      "id": "bird_433",
+      "db_id": "thrombosis_prediction",
+      "difficulty": "challenging",
+      "input": {
+        "question": "I'm screening outpatient clinic patients with anemia for rheumatologic autoimmunity. Among patients who were followed as outpatients (rather than admitted to the hospital) and who ever had a hemoglobin value below 10 on any lab test, who showed the strongest anti-ribonuclear protein antibody response? Please return, for every patient whose anti-ribonuclear protein antibody level reached the highest point ever recorded on their lab tests (list all of them if several share that highest level): the patient ID, the patient's sex, and that highest-ever recorded anti-ribonuclear protein antibody level. Nothing else.",
+        "evidence": "Anti-ribonuclear protein refers to the antibody measured in the laboratory tests (anti-RNP)."
+      },
+      "oracle": "SELECT p.ID, p.SEX, MAX(CAST(r.RNP AS REAL)) AS highest_level FROM Patient p JOIN Laboratory r ON r.ID = p.ID WHERE p.Admission = '-' AND EXISTS (SELECT 1 FROM Laboratory h WHERE h.ID = p.ID AND h.HGB < 10) GROUP BY p.ID, p.SEX HAVING MAX(CAST(r.RNP AS REAL)) = (SELECT MAX(CAST(r2.RNP AS REAL)) FROM Patient p2 JOIN Laboratory r2 ON r2.ID = p2.ID WHERE p2.Admission = '-' AND EXISTS (SELECT 1 FROM Laboratory h2 WHERE h2.ID = p2.ID AND h2.HGB < 10))"
+    },
+    {
+      "benchmark": "bird",
+      "id": "bird_383",
+      "db_id": "thrombosis_prediction",
+      "difficulty": "moderate",
+      "input": {
+        "question": "Across laboratory records with PLT > 400 for female patients whose patient profile lists an SLE diagnosis, what is the average ALB value rounded to four decimal places?",
+        "evidence": ""
+      },
+      "oracle": "SELECT ROUND(AVG(CAST(l.ALB AS DECIMAL(10, 4))), 4) FROM Patient AS p JOIN Laboratory AS l ON l.ID = p.ID WHERE l.PLT > 400 AND ((',' || REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(COALESCE(p.Diagnosis, ''), CHAR(13), ','), CHAR(10), ','), CHAR(29), ','), CHAR(11), ','), '  ', ','), ' ', '') || ',') LIKE '%,SLE,%' OR (',' || REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(COALESCE(p.Diagnosis, ''), CHAR(13), ','), CHAR(10), ','), CHAR(29), ','), CHAR(11), ','), '  ', ','), ' ', '') || ',') LIKE '%,SLE(%') AND p.SEX = 'F'"
+    },
+    {
+      "benchmark": "bird",
+      "id": "bird_405",
+      "db_id": "thrombosis_prediction",
+      "difficulty": "challenging",
+      "input": {
+        "question": "What was the average age of the register's patients in 1999, considering all patients who ever had marked or worse proteinuria on a lab test? Age in 1999 means 1999 minus the patient's year of birth. Marked or worse proteinuria means grade 3 or 4 on the original scale, or 300, 1000 or above on the scale used since 1987; traces and grades 1 and 2 don't count. I just need the one average number, in years.",
+        "evidence": "U-PRO = proteinuria result of a laboratory test; TR = traces of proteinuria."
+      },
+      "oracle": "SELECT AVG('1999' - CAST(STRFTIME('%Y', Birthday) AS INTEGER)) AS average_age FROM Patient WHERE ID IN (SELECT ID FROM Laboratory WHERE `U-PRO` IN ('3','4') OR CAST(REPLACE(`U-PRO`, '>=', '') AS REAL) >= 300)"
+    },
+    {
+      "benchmark": "bird",
+      "id": "bird_468",
+      "db_id": "toxicology",
+      "difficulty": "moderate",
+      "input": {
+        "question": "Among molecules containing at least one single bond, what is the average number of oxygen atoms per molecule? Include molecules with no oxygen and round to four decimal places.",
+        "evidence": "The '-' bond-type symbol denotes a single bond."
+      },
+      "oracle": "WITH molecules AS ( SELECT DISTINCT molecule_id FROM bond WHERE bond_type = '-' ), oxygen AS ( SELECT molecule_id, COUNT(*) AS n FROM atom WHERE element = 'o' GROUP BY molecule_id ) SELECT ROUND(AVG(COALESCE(oxygen.n, 0)), 4) FROM molecules LEFT JOIN oxygen ON oxygen.molecule_id = molecules.molecule_id"
+    },
+    {
+      "benchmark": "bird",
+      "id": "bird_482",
+      "db_id": "toxicology",
+      "difficulty": "challenging",
+      "input": {
+        "question": "For the molecule containing atom TR041_10, I'd like to know the molecule id, whether it's carcinogenic (YES or NO), and the number of multiple bonds in that molecule. Please use the rule that a molecule labeled '+' is carcinogenic (YES) and one labeled '-' is not (NO).",
+        "evidence": ""
+      },
+      "oracle": "SELECT T2.molecule_id, IIF(T2.label = '+', 'YES', 'NO') AS flag_carcinogenic, COUNT(T3.bond_id) AS multiple_bonds FROM atom AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id INNER JOIN bond AS T3 ON T3.molecule_id = T2.molecule_id WHERE T1.atom_id = 'TR041_10' AND T3.bond_type <> '-' GROUP BY T2.molecule_id, T2.label"
+    },
+    {
+      "benchmark": "bird",
+      "id": "bird_476",
+      "db_id": "toxicology",
+      "difficulty": "moderate",
+      "input": {
+        "question": "How many atoms occur in molecules that have at least one triple bond and at least one phosphorus or bromine atom?",
+        "evidence": "The '#' bond-type symbol denotes a triple bond."
+      },
+      "oracle": "WITH triple AS (SELECT DISTINCT molecule_id FROM bond WHERE bond_type = '#'), hetero AS (SELECT DISTINCT molecule_id FROM atom WHERE element IN ('p', 'br')), qualified AS (SELECT t.molecule_id FROM triple AS t JOIN hetero AS h ON h.molecule_id = t.molecule_id) SELECT COUNT(*) FROM atom AS a JOIN qualified AS q ON q.molecule_id = a.molecule_id"
+    },
+    {
+      "benchmark": "bird",
+      "id": "bird_487",
+      "db_id": "toxicology",
+      "difficulty": "challenging",
+      "input": {
+        "question": "I'm building a control group of nitrogen-containing structures for a carcinogenicity review. How many molecules in the database contain at least one nitrogen atom, where none of those nitrogen atoms takes part in a double bond or a triple bond? A nitrogen held only by single bonds is fine; any nitrogen in a double or triple bond disqualifies the molecule. Molecules with no nitrogen at all don't count. I just need the single number of such molecules.",
+        "evidence": "Nitrogen refers to the element code 'n'; '=' denotes a double bond; '#' denotes a triple bond; '-' denotes a single bond."
+      },
+      "oracle": "SELECT COUNT(*) AS number_of_molecules FROM molecule AS m WHERE EXISTS (SELECT 1 FROM atom AS a WHERE a.molecule_id = m.molecule_id AND a.element = 'n') AND NOT EXISTS (SELECT 1 FROM atom AS a2 INNER JOIN connected AS c ON c.atom_id = a2.atom_id OR c.atom_id2 = a2.atom_id INNER JOIN bond AS b ON b.bond_id = c.bond_id WHERE a2.molecule_id = m.molecule_id AND a2.element = 'n' AND b.bond_type <> '-')"
+    },
+    {
+      "benchmark": "bird",
+      "id": "bird_338",
+      "db_id": "superhero",
+      "difficulty": "moderate",
+      "input": {
+        "question": "What known full names belong to superheroes tied for the highest strength attribute value?",
+        "evidence": ""
+      },
+      "oracle": "SELECT DISTINCT s.full_name FROM superhero AS s JOIN hero_attribute AS ha ON ha.hero_id = s.id JOIN attribute AS a ON a.id = ha.attribute_id WHERE a.attribute_name = 'Strength' AND ha.attribute_value = ( SELECT MAX(ha2.attribute_value) FROM hero_attribute AS ha2 JOIN attribute AS a2 ON a2.id = ha2.attribute_id WHERE a2.attribute_name = 'Strength' ) AND s.full_name IS NOT NULL AND s.full_name <> '-' ORDER BY s.full_name ASC"
+    },
+    {
+      "benchmark": "bird",
+      "id": "bird_346",
+      "db_id": "superhero",
+      "difficulty": "challenging",
+      "input": {
+        "question": "I'm writing an article about heroes who fall outside the classic good-versus-evil divide. How many superheroes in the database have an alignment that is neither good nor bad? Please give me just that count. Note that this should cover all superheroes in the database.",
+        "evidence": "good: a superhero whose alignment is Good; bad: a superhero whose alignment is Bad; alignment: the moral category assigned to a superhero"
+      },
+      "oracle": "SELECT COUNT(*) AS neither_good_nor_bad FROM superhero AS s LEFT JOIN alignment AS a ON s.alignment_id = a.id WHERE a.alignment IS NULL OR a.alignment NOT IN ('Good', 'Bad')"
+    },
+    {
+      "benchmark": "bird",
+      "id": "bird_336",
+      "db_id": "superhero",
+      "difficulty": "moderate",
+      "input": {
+        "question": "Among superheroes from 170 through 190 cm tall whose recorded eye-colour category is unknown, list their names.",
+        "evidence": ""
+      },
+      "oracle": "SELECT DISTINCT T1.superhero_name FROM superhero AS T1 INNER JOIN colour AS T2 ON T1.eye_colour_id = T2.id WHERE T1.height_cm BETWEEN 170 AND 190 AND T2.colour = 'No Colour'"
+    },
+    {
+      "benchmark": "bird",
+      "id": "bird_356",
+      "db_id": "superhero",
+      "difficulty": "challenging",
+      "input": {
+        "question": "I'm researching heroes like A-Bomb. What is the average height in centimetres of the superheroes in A-Bomb's group? Please give me just that single number, rounded to one decimal place. Note that A-Bomb itself belongs to its group and should be included, and only heroes whose height is actually on record should count toward the average-anyone without a recorded height should be left out rather than counted as some height.",
+        "evidence": "In this request, \"group\" refers to race."
+      },
+      "oracle": "SELECT ROUND(AVG(CASE WHEN height_cm > 0 THEN height_cm END), 1) AS average_height_cm FROM superhero WHERE race_id = (SELECT race_id FROM superhero WHERE superhero_name = 'A-Bomb')"
+    }
+  ]
+}

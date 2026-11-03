@@ -37,5 +37,7 @@ def test_sqlite_checkpoint_resumes_in_a_new_process(tmp_path):
     assert resumed["final_answer"] == "门店 A 净收入为 12000 分"
     assert resumed["step_count"] == 3
     assert resumed["trace_id"] == paused["trace_id"]
+    assert resumed["memory_check"]["passed"] is True
+    assert all(resumed["memory_check"]["checks"].values())
     (span,) = read_spans(str(trace_path))
     assert span["attributes"]["result_fen"] == 12000

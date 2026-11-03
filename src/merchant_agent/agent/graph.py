@@ -6,7 +6,7 @@ from langgraph.checkpoint.base import BaseCheckpointSaver
 from langgraph.graph import END, START, StateGraph
 
 from merchant_agent.agent.model_port import ModelPort
-from merchant_agent.agent.planning import make_plan_node, route_after_plan
+from merchant_agent.agent.planning import PLANNING_INSTRUCTION, make_plan_node, route_after_plan
 from merchant_agent.agent.retry_policy import should_retry_tool
 from merchant_agent.agent.state import AgentState
 
@@ -16,10 +16,11 @@ def build_single_turn_graph(
     tool_node: Callable[[AgentState], Awaitable[dict]],
     *,
     trace_path: str | None = None,
+    planning_instruction: str = PLANNING_INSTRUCTION,
 ):
     """注入模型和工具节点，编译一轮“规划→可选行动”的图。"""
     graph = StateGraph(AgentState)
-    graph.add_node("plan", make_plan_node(model, trace_path))
+    graph.add_node("plan", make_plan_node(model, trace_path, planning_instruction=planning_instruction))
     graph.add_node("act", tool_node)
     graph.add_edge(START, "plan")
     # 结束决策直接退出；工具决策进入注入的行动节点。
@@ -79,10 +80,11 @@ def build_observation_loop_graph(
     checkpointer: BaseCheckpointSaver | None = None,
     interrupt_before: list[str] | None = None,
     trace_path: str | None = None,
+    planning_instruction: str = PLANNING_INSTRUCTION,
 ):
     """编译有界循环图；可注入检查点并在指定节点前暂停。"""
     graph = StateGraph(AgentState)
-    graph.add_node("plan", make_plan_node(model, trace_path))
+    graph.add_node("plan", make_plan_node(model, trace_path, planning_instruction=planning_instruction))
     graph.add_node("act", tool_node)
     graph.add_node("retry", _retry_node)
     graph.add_node("budget", _budget_node)
