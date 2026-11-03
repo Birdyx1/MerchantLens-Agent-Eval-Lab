@@ -31,6 +31,12 @@
 2. **当前主要失败模式是格式契约，而非 SQL 能力**：模型能写出正确 SQL（含 `ROUND`、`NULLIF`、`ORDER BY`），但在拿到结果后「直接答人话」，破坏 JSON 规划契约。2/6 次稳定复现，说明这是 agent 的**格式遵循缺陷**，不是数据或评测缺陷。
 3. **该缺陷会被结果导向评测捕获**：这类 Trial 记为 error → ineligible → 判失败，不会把「答对但格式坏」误判为通过。
 
+## 格式契约修复与重跑
+
+`parse_planning_decision` 已容错：模型在拿到工具结果后直接输出自然语言答案（Markdown 表格）时，视为 finish（`action=finish`），而不是抛 `ValueError` 让整个 Trial 报 error；Markdown 代码块包裹的 JSON、坏 JSON、不像答案的短文本仍被拒绝。
+
+修复后重跑 3 题：**3/3 completed 且结果集全部匹配**（私有记录 `runs/nl2sql_probe/9257a1a4def44f3ba34150f6b9a49457/`）。对比修复前 2/6 格式失败（当时这些 Trial 记为 error），这是明确的改善。
+
 ## 局限
 
 - 样本仅 3 题 × 2 次，`draft`、未双标共识，不入正式集合，不能据此推断稳定成功率。
