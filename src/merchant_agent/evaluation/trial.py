@@ -11,7 +11,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from merchant_agent.agent.state import AgentState, initial_state
-from merchant_agent.evaluation.holdout import prepare_eval_dispatch
+from merchant_agent.evaluation.holdout import EvalDispatch, prepare_eval_dispatch
 from merchant_agent.evaluation.task import load_eval_task
 from merchant_agent.tools.sql.init_orders_db import create_orders_db
 from merchant_agent.tracing.reader import read_spans
@@ -27,8 +27,14 @@ def _sha256(path: Path) -> str:
 async def run_trial(
     task_path: Path, *, project_root: Path, invoke: TrialInvoker,
     model_version: str, harness_version: str, timeout_seconds: float | None = None,
+    dispatch: EvalDispatch | None = None,
+    max_steps: int | None = None, max_total_tokens: int | None = None,
 ) -> dict:
-    """为一个 Task 建立全新环境；失败也保留 Trial 记录。"""
+    """为一个 Task 建立全新环境；失败也保留 Trial 记录。
+
+    默认只接受已登记评测集合的 Task；探针等显式场景可传入自定义 dispatch，
+    由调用方自行保证不污染正式集合与 Holdout。预算缺省沿用 initial_state 默认值。
+    """
     root = project_root.resolve()
     task = load_eval_task(task_path, project_root=root)
     if not model_version.strip() or not harness_version.strip():
@@ -39,7 +45,8 @@ async def run_trial(
     ):
         raise ValueError("Trial 时限必须是有限正数")
     trial_id = uuid.uuid4().hex
-    dispatch = prepare_eval_dispatch(task_path, project_root=root, run_id=trial_id)
+    if dispatch is None:
+        dispatch = prepare_eval_dispatch(task_path, project_root=root, run_id=trial_id)
     trial_dir = root / "runs" / "trials" / trial_id
     trial_dir.mkdir(parents=True, exist_ok=False, mode=0o700)
     db_path = trial_dir / "orders.sqlite"
@@ -47,7 +54,13 @@ async def run_trial(
     record_path = trial_dir / "trial.json"
     create_orders_db(str(task.fixture_path), str(db_path))
     before_db = _sha256(db_path)
-    state = initial_state(task.task_id, uuid.uuid4().hex, uuid.uuid4().hex[:16], dispatch.agent_input)
+    budget: dict[str, int] = {}
+    if max_steps is not None:
+        budget["max_steps"] = max_steps
+    if max_total_tokens is not None:
+        budget["max_total_tokens"] = max_total_tokens
+    state = initial_state(task.task_id, uuid.uuid4().hex, uuid.uuid4().hex[:16],
+                          dispatch.agent_input, **budget)
     thread_id = f"eval-{trial_id}"
     started = datetime.now(timezone.utc).isoformat()
     record = {

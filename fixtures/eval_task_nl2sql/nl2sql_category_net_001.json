@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.2",
+  "task_id": "nl2sql_category_net_001",
+  "task_type": "nl2sql",
+  "rubric_id": "nl2sql_v1",
+  "rubric_sha256": "4729ea9eeaba9cbae70ccc138a0a1ee83f0b1a80336c9c29aa75c6a9bc5dfad7",
+  "input": {
+    "user_request": "用 SQL 列出各品类的净收入合计（分），按净收入从高到低排序，输出列名必须为 category、net_fen 两列。"
+  },
+  "environment": {
+    "fixture_path": "fixtures/business_data/analytics_orders.csv",
+    "fixture_sha256": "1f3a5fb654f39fd0a8d0d82fa8c7e86b248e372677b89621306c832dc71c0289"
+  },
+  "oracle": {
+    "expected_columns": ["category", "net_fen"],
+    "expected_rows": [["饮品", 5169537], ["主食", 5129160], ["零售", 4845858]],
+    "column_tolerance": 1e-6
+  },
+  "provenance": {
+    "kind": "synthetic",
+    "source_ref": "fixtures/business_data/analytics_orders.csv"
+  },
+  "label_status": "draft"
+}

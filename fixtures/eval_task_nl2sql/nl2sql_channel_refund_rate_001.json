@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.2",
+  "task_id": "nl2sql_channel_refund_rate_001",
+  "task_type": "nl2sql",
+  "rubric_id": "nl2sql_v1",
+  "rubric_sha256": "4729ea9eeaba9cbae70ccc138a0a1ee83f0b1a80336c9c29aa75c6a9bc5dfad7",
+  "input": {
+    "user_request": "用 SQL 列出各渠道的退款率（退款金额/支付金额，保留 4 位小数），按退款率从高到低排序，输出列名必须为 channel、refund_rate 两列。"
+  },
+  "environment": {
+    "fixture_path": "fixtures/business_data/analytics_orders.csv",
+    "fixture_sha256": "1f3a5fb654f39fd0a8d0d82fa8c7e86b248e372677b89621306c832dc71c0289"
+  },
+  "oracle": {
+    "expected_columns": ["channel", "refund_rate"],
+    "expected_rows": [["堂食", 0.0279], ["外卖", 0.0267], ["自提", 0.0215]],
+    "column_tolerance": 1e-6
+  },
+  "provenance": {
+    "kind": "synthetic",
+    "source_ref": "fixtures/business_data/analytics_orders.csv"
+  },
+  "label_status": "draft"
+}
