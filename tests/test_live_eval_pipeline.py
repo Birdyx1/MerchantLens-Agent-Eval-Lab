@@ -7,6 +7,7 @@ from merchant_agent.evaluation.code_evaluator import evaluate_trial
 from merchant_agent.evaluation.live_invoke import invoke_live_agent
 from merchant_agent.evaluation.metrics import trial_metrics
 from merchant_agent.evaluation.trial import run_trial
+from merchant_agent.evaluation.trajectory_evaluator import evaluate_trial_trajectory
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -50,3 +51,19 @@ def test_trial_to_mcp_graph_trace_score_and_metrics(tmp_path):
     assert row["overall_success"] is True
     assert row["tool_calls"] == 1
     assert row["total_tokens"] == 24
+    trajectory = evaluate_trial_trajectory(trial, task, project_root=tmp_path)
+    assert trajectory["passed"] is True
+    assert all(trajectory["checks"].values())
+
+    # 保留同样的答案和工具结果，仅移动最终决策到取证前；旧结果裁判仍能通过。
+    trace_path = tmp_path / trial["trace_path"]
+    spans = [json.loads(line) for line in trace_path.read_text().splitlines()]
+    spans[1], spans[2] = spans[2], spans[1]
+    trace_path.write_text("".join(json.dumps(span) + "\n" for span in spans))
+    import hashlib
+    trial["trace_sha256"] = hashlib.sha256(trace_path.read_bytes()).hexdigest()
+    assert evaluate_trial(trial, task, project_root=tmp_path)["passed"] is True
+    reordered = evaluate_trial_trajectory(trial, task, project_root=tmp_path)
+    assert reordered["result_passed"] is True
+    assert reordered["trajectory_passed"] is False
+    assert reordered["failure_mode"] == "ungrounded_or_wrong_order"

@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.1",
+  "task_id": "trap_store_net_v_001",
+  "task_type": "store_net",
+  "rubric_id": "store_net_v1",
+  "rubric_sha256": "fe86a82f7d4efc004140620c83e69e3088b53d8c503e0b046a8229f03085898f",
+  "input": {
+    "user_request": "请查询门店 V 的净收入，单位为分。"
+  },
+  "environment": {
+    "fixture_path": "fixtures/business_data/trap_orders.csv",
+    "fixture_sha256": "2fc4a514b2262d06a5ecbc6238291526efecfb6bbda4aa4f427593b8c3c74775"
+  },
+  "oracle": {
+    "expected_amount_fen": 1234567,
+    "required_tool_call": {
+      "name": "get_store_net",
+      "arguments": {
+        "store_id": "V"
+      }
+    }
+  },
+  "provenance": {
+    "kind": "synthetic",
+    "source_ref": "fixtures/business_data/trap_orders.csv"
+  },
+  "label_status": "draft"
+}

@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.2",
+  "task_id": "trap_store_net_sum_de_001",
+  "task_type": "store_net_sum",
+  "rubric_id": "store_net_sum_v1",
+  "rubric_sha256": "72e0301d2043d1afdb44d666576dd738c799546e52892f18737200efe6c08f83",
+  "input": {
+    "user_request": "请查询门店 D 和门店 E 的净收入合计，单位为分。"
+  },
+  "environment": {
+    "fixture_path": "fixtures/business_data/pilot_orders.csv",
+    "fixture_sha256": "6785a9e2cd388cdcd3c6f72425763db34d5ab5525c768b5f5dace17de20469fb"
+  },
+  "oracle": {
+    "expected_total_fen": 30100,
+    "required_tool_calls": [
+      {"name": "get_store_net", "arguments": {"store_id": "D"}},
+      {"name": "get_store_net", "arguments": {"store_id": "E"}}
+    ]
+  },
+  "provenance": {
+    "kind": "synthetic",
+    "source_ref": "fixtures/business_data/pilot_orders.csv"
+  },
+  "label_status": "draft"
+}
