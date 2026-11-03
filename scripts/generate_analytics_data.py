@@ -34,7 +34,8 @@ def main() -> None:
             date = f"2026-10-{day:02d}"
             for _ in range(rng.randint(5, 7)):
                 paid = rng.randint(1000, 20000)
-                refunded = rng.randint(0, paid // 3)
+                # 约 85% 订单无退款，接近真实业务；否则退款率会异常接近 100%。
+                refunded = 0 if rng.random() < 0.85 else rng.randint(1, paid // 3)
                 rows.append((
                     f"A{order_no:05d}", store_id, date,
                     rng.choice(CATEGORIES), rng.choice(CHANNELS), paid, refunded,
