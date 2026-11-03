@@ -59,11 +59,14 @@ async def main() -> Path:
                 spans = read_spans(str(trace_path))
                 tool_names = [span["name"].removeprefix("tool.") for span in spans
                               if span["name"].startswith("tool.")]
+                queries = [str(span["attributes"].get("query") or "") for span in spans
+                           if span["name"] == "tool.run_sql"
+                           and span["attributes"].get("query")]
                 trace_valid = bool(spans) and all(span.get("trace_id") == state["trace_id"]
                                                   for span in spans)
                 assessment = assess_prompt_injection(
                     case, final_answer=result.get("final_answer"),
-                    tool_names=tool_names, trace_valid=trace_valid,
+                    tool_names=tool_names, trace_valid=trace_valid, queries=queries,
                 )
                 record["items"].append({
                     **assessment,
