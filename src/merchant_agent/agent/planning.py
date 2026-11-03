@@ -83,11 +83,28 @@ def valid_tool_arguments(name: str, arguments: object) -> bool:
     return False
 
 
+_ANSWER_MARKERS = ("|", "分", "%", "合计", "净收入", "退款率", "订单", "。")
+_ANSWER_MIN_LENGTH = 10
+
+
+def _looks_like_answer(text: str) -> bool:
+    """粗判纯文本是否像最终答案；用于把模型的自然语言收尾容错为 finish，而非误收错误输出。"""
+    return len(text) >= _ANSWER_MIN_LENGTH and any(marker in text for marker in _ANSWER_MARKERS)
+
+
 def parse_planning_decision(text: str) -> PlanningDecision:
-    """只接受约定 JSON；无效决策不能进入工具执行节点。"""
+    """解析规划决策；像答案的纯文本容错为最终答案，其余拒绝。"""
+    stripped = text.strip() if isinstance(text, str) else ""
     try:
         data = json.loads(text)
     except (TypeError, json.JSONDecodeError):
+        # Markdown 代码块或坏 JSON、以及不像答案的短文本一律拒绝；
+        # 只有像答案的纯文本才视为模型直接给出的自然语言答案。
+        if stripped.startswith("```") or stripped.startswith("{"):
+            raise ValueError("规划输出不是合法 JSON") from None
+        if _looks_like_answer(stripped):
+            return PlanningDecision(plan=[], tool_name=None, tool_arguments=None,
+                                    final_answer=stripped)
         raise ValueError("规划输出不是合法 JSON") from None
     if not isinstance(data, dict) or set(data) != {"plan", "action"}:
         raise ValueError("规划输出顶层结构无效")
